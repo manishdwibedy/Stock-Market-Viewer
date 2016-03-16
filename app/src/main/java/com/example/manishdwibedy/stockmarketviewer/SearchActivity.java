@@ -19,9 +19,7 @@ public class SearchActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        //handleIntent(getIntent());
 
-        //
         final Intent queryIntent = getIntent();
 
         final String queryAction = queryIntent.getAction();
@@ -32,7 +30,6 @@ public class SearchActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "Create intent NOT from search");
         }
-        //
     }
 
     @Override
@@ -50,11 +47,6 @@ public class SearchActivity extends AppCompatActivity {
         return true;
     }
 
-//    @Override
-//    protected void onNewIntent(Intent intent) {
-//        handleIntent(intent);
-//    }
-
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -62,12 +54,8 @@ public class SearchActivity extends AppCompatActivity {
             //use the query to search
             Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + intent.getDataString(),
                     Toast.LENGTH_SHORT).show();
-
-
         }
     }
-
-    //
 
     @Override
     public void onNewIntent(final Intent queryIntent) {
@@ -88,13 +76,9 @@ public class SearchActivity extends AppCompatActivity {
             queryString = queryIntent.getStringExtra(SearchManager.QUERY); // from search-bar
         }
 
-        // display results here
-        //bundle.putString("user_query", queryString);
         queryIntent.setData(Uri.fromParts("", "", queryString));
 
         queryIntent.setAction(Intent.ACTION_SEARCH);
-        //queryIntent.putExtras(bundle);
-        //startActivity(queryIntent);
     }
 
     private void doView(final Intent queryIntent) {

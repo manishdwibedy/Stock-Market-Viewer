@@ -49,11 +49,11 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
                 // If the Stock name matches
                 if(data.getName().toLowerCase().contains(query.toLowerCase()))
                 {
-                    cursor.addRow(createRow(new Integer(n++), data.getName(), null));
+                    cursor.addRow(createRow(new Integer(n++), data.getName()));
                 }
                 else if(data.getSymbol().toLowerCase().contains(query.toLowerCase()))
                 {
-                    cursor.addRow(createRow(new Integer(n++), data.getName(), null));
+                    cursor.addRow(createRow(new Integer(n++), data.getName()));
                 }
             }
         } catch (Exception e) {
@@ -78,11 +78,9 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
         throw new UnsupportedOperationException();
     }
 
-    private Object[] createRow(Integer id, String text1, //String text2,
-                               String name) {
+    private Object[] createRow(Integer id, String text1) {
         return new Object[] { id, // _id
                 text1, // text1
-                //text2, // text2
                 text1,
                 "android.intent.action.SEARCH", // action
                 SearchManager.SUGGEST_NEVER_MAKE_SHORTCUT };
