@@ -1,0 +1,4 @@
+Reference used for the development of the application
+
+ICONS:
+https://icons8.com/web-app/for/androidL/back
