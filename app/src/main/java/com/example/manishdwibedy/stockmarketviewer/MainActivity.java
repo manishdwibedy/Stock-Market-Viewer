@@ -11,7 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     private static final String[] SUGGESTIONS = {
             "Bauru", "Sao Paulo", "Rio de Janeiro",
@@ -19,6 +19,8 @@ public class MainActivity extends AppCompatActivity {
             "Tocantins", "Rio Grande do Sul"
     };
     private SimpleCursorAdapter mAdapter;
+    private final String TAG = "MainActivity";
+    SearchView searchView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
+        searchView =
                 (SearchView) menu.findItem(R.id.menu_search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
@@ -48,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        
+
         return super.onOptionsItemSelected(item);
     }
+
 }

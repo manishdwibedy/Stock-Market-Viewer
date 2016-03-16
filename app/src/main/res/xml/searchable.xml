@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
     android:label="@string/search_label"
-    android:hint="@string/search_hint">
+    android:hint="@string/search_hint"
+    android:searchSuggestThreshold="3"
+    android:voiceSearchMode=
+        "showVoiceSearchButton|launchRecognizer"
+    android:searchSuggestAuthority="com.example.manishdwibedy.stockmarketviewer.SearchSuggestionsProvider"
+    android:searchSuggestSelection=" ? "
+    android:searchSuggestIntentAction="android.intent.action.VIEW">
+>
 </searchable>
