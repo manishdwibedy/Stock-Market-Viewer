@@ -3,14 +3,17 @@ package com.example.manishdwibedy.stockmarketviewer;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.manishdwibedy.stockmarketviewer.fragments.TabsPagerAdapter;
@@ -18,6 +21,8 @@ import com.example.manishdwibedy.stockmarketviewer.fragments.TabsPagerAdapter;
 
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
+
+    Drawable star = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +97,39 @@ public class SearchActivity extends AppCompatActivity {
         final String queryAction = queryIntent.getAction();
         if (Intent.ACTION_SEARCH.equals(queryAction)) {
             this.handleIntent(queryIntent);
+        }
+    }
+
+    // Handle item selection
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        // Setting the star drawable the first time
+        if(star==null)
+        {
+            star = ContextCompat.getDrawable(this.getApplicationContext(), R.drawable.star);
+        }
+
+        switch (item.getItemId()) {
+            case R.id.bookmark:
+                if(item.getIcon().getConstantState().equals(star.getConstantState()))
+                {
+                    item.setIcon(R.drawable.star_filled);
+                    Toast.makeText(this.getApplicationContext(), "Bookmarked!",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+                else
+                {
+                    item.setIcon(R.drawable.star);
+                    Toast.makeText(this.getApplicationContext(), "Removed the bookmark!",
+                            Toast.LENGTH_SHORT).show();
+
+                }
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
     }
 }
