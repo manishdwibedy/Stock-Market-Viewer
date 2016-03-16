@@ -3,7 +3,6 @@ package com.example.manishdwibedy.stockmarketviewer;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -20,14 +19,16 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        final Intent queryIntent = getIntent();
 
+        // Getting the intent's action
+        final Intent queryIntent = getIntent();
         final String queryAction = queryIntent.getAction();
-        if (Intent.ACTION_SEARCH.equals(queryAction)) {
-            this.doSearchQuery(queryIntent);
-        } else if (Intent.ACTION_VIEW.equals(queryAction)) {
-            this.doView(queryIntent);
-        } else {
+        if (Intent.ACTION_SEARCH.equals(queryAction))
+        {
+            this.handleIntent(queryIntent);
+        }
+        else
+        {
             Log.d(TAG, "Create intent NOT from search");
         }
     }
@@ -35,11 +36,12 @@ public class SearchActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu_main, menu);
+        inflater.inflate(R.menu.menu_results, menu);
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+
         SearchView searchView =
-                (SearchView) menu.findItem(R.id.menu_search).getActionView();
+                (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchManager.getSearchablesInGlobalSearch();
@@ -50,43 +52,26 @@ public class SearchActivity extends AppCompatActivity {
     private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            //use the query to search
-            Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + intent.getDataString(),
+
+            // Getting the stock's name
+            String stockName = intent.getDataString();
+
+            // Showing the stock name
+            Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + stockName,
                     Toast.LENGTH_SHORT).show();
+
+            // Set the title name to reflect the stock's name
+            setTitle(stockName);
         }
     }
 
     @Override
     public void onNewIntent(final Intent queryIntent) {
         super.onNewIntent(queryIntent);
+
         final String queryAction = queryIntent.getAction();
         if (Intent.ACTION_SEARCH.equals(queryAction)) {
-            this.doSearchQuery(queryIntent);
-        } else if (Intent.ACTION_VIEW.equals(queryAction)) {
-            this.doView(queryIntent);
+            this.handleIntent(queryIntent);
         }
-    }
-
-    private void doSearchQuery(final Intent queryIntent) {
-        handleIntent(queryIntent);
-
-        String queryString = queryIntent.getDataString(); // from suggestions
-        if (queryString == null) {
-            queryString = queryIntent.getStringExtra(SearchManager.QUERY); // from search-bar
-        }
-
-        queryIntent.setData(Uri.fromParts("", "", queryString));
-
-        queryIntent.setAction(Intent.ACTION_SEARCH);
-    }
-
-    private void doView(final Intent queryIntent) {
-        Uri uri = queryIntent.getData();
-        String action = queryIntent.getAction();
-        Intent intent = new Intent(action);
-        intent.setData(uri);
-        startActivity(intent);
-        this.finish();
     }
 }
