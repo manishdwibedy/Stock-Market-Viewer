@@ -11,7 +11,7 @@
     <TextView android:id="@+id/historical_chart_label"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="@android:style/TextAppearance.Medium.Inverse"
+        android:textAppearance="@android:style/TextAppearance.Large"
         android:gravity="center"
         android:layout_centerVertical="true" />
 
