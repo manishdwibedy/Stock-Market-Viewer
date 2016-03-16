@@ -4,12 +4,17 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.widget.Toast;
+
+import com.example.manishdwibedy.stockmarketviewer.fragments.TabsPagerAdapter;
+
 
 public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
@@ -33,6 +38,19 @@ public class SearchActivity extends AppCompatActivity {
         {
             Log.d(TAG, "Create intent NOT from search");
         }
+
+        // == Setting up the ViewPager ==
+        setupTabs();
+    }
+
+    private void setupTabs() {
+        TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
+        ViewPager pager = (ViewPager) findViewById(R.id.pager);
+        TabsPagerAdapter adapter = new TabsPagerAdapter(getSupportFragmentManager());
+
+
+        pager.setAdapter(adapter);
+        tabs.setupWithViewPager(pager);
     }
 
     @Override

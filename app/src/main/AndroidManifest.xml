@@ -42,7 +42,9 @@
         </activity>
 
         <provider android:name=".SearchSuggestionsProvider"
-            android:authorities="com.example.manishdwibedy.stockmarketviewer.SearchSuggestionsProvider"></provider>
+            android:authorities="com.example.manishdwibedy.stockmarketviewer.SearchSuggestionsProvider">
+        </provider>
+
         <meta-data android:name="android.app.default_searchable"
             android:value=".activity.SearchActivity" />
     </application>

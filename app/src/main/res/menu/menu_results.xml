@@ -8,6 +8,7 @@
         android:id="@+id/search"
         android:title="Hey!"
         appcompat:actionViewClass="android.support.v7.widget.SearchView"
+        android:icon="@drawable/star"
         appcompat:showAsAction="always"/>
 
     <item
