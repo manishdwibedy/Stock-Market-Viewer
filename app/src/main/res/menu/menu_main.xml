@@ -6,6 +6,8 @@
 
     <item
         android:id="@+id/menu_search"
+        android:top="1dp" android:bottom="1dp"
+        android:right="1dp" android:left="1dp"
         android:title="@string/menu_search"
         appcompat:actionViewClass="android.support.v7.widget.SearchView"
         appcompat:showAsAction="always"/>
