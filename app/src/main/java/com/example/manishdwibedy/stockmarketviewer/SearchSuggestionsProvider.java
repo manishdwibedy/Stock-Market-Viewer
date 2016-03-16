@@ -46,10 +46,14 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
         try {
             int n = 0;
             for (Stock data : dataList) {
-                if(data.getName().toLowerCase().contains(query))
+                // If the Stock name matches
+                if(data.getName().toLowerCase().contains(query.toLowerCase()))
                 {
                     cursor.addRow(createRow(new Integer(n++), data.getName(), null));
-                    n++;
+                }
+                else if(data.getSymbol().toLowerCase().contains(query.toLowerCase()))
+                {
+                    cursor.addRow(createRow(new Integer(n++), data.getName(), null));
                 }
             }
         } catch (Exception e) {
