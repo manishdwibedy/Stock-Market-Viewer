@@ -31,12 +31,27 @@ public class PageFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_page_layout, container, false);
-
-        TextView txt = (TextView) rootView.findViewById(R.id.page_number_label);
         int page = getArguments().getInt(ARG_PAGE_NUMBER, -1);
-        txt.setText(String.format("Page %d", page));
+        View view = null;
+        TextView textView;
+        switch (page){
+            case 1:
+                view = inflater.inflate(R.layout.fragment_current_stock, container, false);
+                textView = (TextView) view.findViewById(R.id.current_stock_label);
+                textView.setText("Current Stock");
+                break;
+            case 2:
+                view = inflater.inflate(R.layout.fragment_historical_chart, container, false);
+                textView = (TextView) view.findViewById(R.id.historical_chart_label);
+                textView.setText("Historical Charts");
+                break;
+            case 3:
+                view = inflater.inflate(R.layout.fragment_news_feed, container, false);
+                textView = (TextView) view.findViewById(R.id.news_feed_label);
+                textView.setText("News Feed");
+                break;
 
-        return rootView;
+        }
+        return view;
     }
 }

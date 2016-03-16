@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
+    public final String[] tabNames = new String[]{"Current Stock","Historical Chart","News Feed"};
     public TabsPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -21,11 +22,12 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return tabNames.length;
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return "TAB " + (position + 1);
+
+        return tabNames[position];
     }
 }
