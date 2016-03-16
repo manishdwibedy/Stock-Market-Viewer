@@ -2,9 +2,12 @@
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
+
 ### What is this repository for? ###
 
 * Quick summary
+It is an Android Application for viewing various stock prices of various companies. 
+
 * Version
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
