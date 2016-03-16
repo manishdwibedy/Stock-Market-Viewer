@@ -19,6 +19,8 @@ public class SearchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+        // Adding a back button to the parent activity
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Getting the intent's action
         final Intent queryIntent = getIntent();
