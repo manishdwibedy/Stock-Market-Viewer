@@ -19,13 +19,19 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
     static final String TAG = SearchSuggestionsProvider.class.getSimpleName();
     public static final String AUTHORITY = SearchSuggestionsProvider.class
             .getName();
+
+    // This mode bit configures the database to include a 2nd annotation line with each entry and
+    // to record recent queries.
     public static final int MODE = DATABASE_MODE_QUERIES | DATABASE_MODE_2LINES;
+
+    // Various columns to be displayed
     private static final String[] COLUMNS = {
-            "_id", // must include this column
-            SearchManager.SUGGEST_COLUMN_TEXT_1,
-            SearchManager.SUGGEST_COLUMN_INTENT_DATA,
-            SearchManager.SUGGEST_COLUMN_INTENT_ACTION,
-            SearchManager.SUGGEST_COLUMN_SHORTCUT_ID };
+            "_id",                                          // must include this column
+            SearchManager.SUGGEST_COLUMN_TEXT_1,            // primary line of text
+            SearchManager.SUGGEST_COLUMN_INTENT_DATA,       // passed via intent
+            SearchManager.SUGGEST_COLUMN_INTENT_ACTION,     // suggestion's intent
+            SearchManager.SUGGEST_COLUMN_SHORTCUT_ID        // search suggestion shortcut
+    };
 
     public SearchSuggestionsProvider() {
         setupSuggestions(AUTHORITY, MODE);
@@ -42,7 +48,10 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
 
         MatrixCursor cursor = new MatrixCursor(COLUMNS);
 
+        // Getting the stocks from the API call
         Stock[] dataList = GetStockData.getStocks(query);
+
+        // Addding our stock data to cursor
         try {
             int n = 0;
             for (Stock data : dataList) {
@@ -78,6 +87,7 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
         throw new UnsupportedOperationException();
     }
 
+    // Creating our stock object
     private Object[] createRow(Integer id, String text1) {
         return new Object[] { id, // _id
                 text1, // text1
