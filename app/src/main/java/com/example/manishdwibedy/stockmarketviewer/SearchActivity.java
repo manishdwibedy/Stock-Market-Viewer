@@ -161,6 +161,7 @@ public class SearchActivity extends AppCompatActivity {
                 // Removing the stock as a favourite
                 else
                 {
+                    removeFromFavorites();
                     item.setIcon(R.drawable.star);
                     Toast.makeText(this.getApplicationContext(), "Removed "  + stockName + "!!",
                             Toast.LENGTH_SHORT).show();
@@ -228,6 +229,36 @@ public class SearchActivity extends AppCompatActivity {
 
             // Storing the updated favorites for future usage!
             preferences.edit().putString(Constant.favouritesKey, getGson().toJson(favorites)).apply();
+        }
+    }
+
+    private void removeFromFavorites() {
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+
+        // The favorites should have been initialized already!
+        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                .equals(Constant.favoritesEmpty)) {
+
+            // Retrieving the favorites JSON representation
+            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
+
+            // Retrieving the favorites object
+            Favorites favorites = getGson().fromJson(favoritesJSON, Favorites.class);
+
+            favorites.setCount(favorites.getCount() - 1);
+
+            // Removing it from the favourite list
+            Stock stock = new Stock();
+            stock.setName(stockName);
+            stock.setExchange(stockName);
+            stock.setSymbol(stockName);
+
+            favorites.getFavoriteList().remove(stock);
+
+            // Storing the updated favorites for future usage!
+            preferences.edit().putString(Constant.favouritesKey, getGson().toJson(favorites)).apply();
+
         }
     }
 
