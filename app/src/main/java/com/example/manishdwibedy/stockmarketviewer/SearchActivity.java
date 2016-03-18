@@ -3,6 +3,7 @@ package com.example.manishdwibedy.stockmarketviewer;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -17,13 +18,26 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.manishdwibedy.stockmarketviewer.fragments.TabsPagerAdapter;
+import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
+import com.example.manishdwibedy.stockmarketviewer.model.Stock;
+import com.example.manishdwibedy.stockmarketviewer.util.Constant;
+import com.google.gson.Gson;
+
+import java.util.ArrayList;
 
 
 public class SearchActivity extends AppCompatActivity {
+    // The TAG to be used for logging purposes
     private final String TAG = "SearchActivity";
 
+    // The drawable star, which represents where the stock is a favorite or NOT!
     Drawable star = null;
+
+    // Storing the stock's name
     private String stockName;
+
+    // GSON to be used for serializing and deserializing objects
+    Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +61,12 @@ public class SearchActivity extends AppCompatActivity {
 
         // == Setting up the ViewPager ==
         setupTabs();
+
+        // Initializing GSON
+        gson = new Gson();
+
+        // seting up favourites
+        setupFavorites();
     }
 
     private void setupTabs() {
@@ -120,6 +140,7 @@ public class SearchActivity extends AppCompatActivity {
                 // Set the stock as a favourite
                 if(item.getIcon().getConstantState().equals(star.getConstantState()))
                 {
+                    addToFavorites();
                     item.setIcon(R.drawable.star_filled);
                     Toast.makeText(this.getApplicationContext(), "Bookmarked " + stockName + "!!",
                             Toast.LENGTH_SHORT).show();
@@ -136,6 +157,63 @@ public class SearchActivity extends AppCompatActivity {
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    // Setting up favorites for the first time only
+    private void setupFavorites(){
+        SharedPreferences preferences = this.getApplicationContext().
+                                    getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+
+        // If the favourites has not been initialized, then initialize it here
+        if (preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                                                            .equals(Constant.favoritesEmpty))
+        {
+            Favorites favorites = new Favorites();
+            favorites.setCount(0);
+            favorites.setFavoriteList(new ArrayList<Stock>());
+
+            preferences.edit().putString(Constant.favouritesKey, gson.toJson(favorites)).apply();
+        }
+        else
+        {
+            // Retrieving the favorites JSON representation
+            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
+
+            // Retrieving the favorites object
+            Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
+
+            Toast.makeText(this.getApplicationContext(), "Favorite Count : "  + favorites.getCount(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+    // Add the stock as a favourite and save in user preferences
+    public void addToFavorites(){
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+
+        // The favorites should have been initialized already!
+        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                .equals(Constant.favoritesEmpty)) {
+
+            // Retrieving the favorites JSON representation
+            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
+
+            // Retrieving the favorites object
+            Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
+
+            // Incrementing the favourite count
+            favorites.setCount(favorites.getCount() + 1);
+
+            // Adding it to the favourite list
+            Stock stock = new Stock();
+            stock.setName(stockName);
+            favorites.getFavoriteList().add(stock);
+
+            // Storing the updated favorites for future usage!
+            preferences.edit().putString(Constant.favouritesKey, gson.toJson(favorites)).apply();
         }
     }
 }
