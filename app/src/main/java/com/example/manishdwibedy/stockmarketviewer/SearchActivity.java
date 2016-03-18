@@ -39,6 +39,10 @@ public class SearchActivity extends AppCompatActivity {
     // GSON to be used for serializing and deserializing objects
     private Gson gson;
 
+    // Stock Favorite
+    private boolean isFavorite = false;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +87,7 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_results, menu);
+
         SearchManager searchManager =
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
@@ -91,6 +96,11 @@ public class SearchActivity extends AppCompatActivity {
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchManager.getSearchablesInGlobalSearch();
+
+        if(isFavorite)
+        {
+            menu.findItem(R.id.bookmark).setIcon(R.drawable.star_filled);
+        }
 
         return true;
     }
@@ -185,7 +195,7 @@ public class SearchActivity extends AppCompatActivity {
             // Retrieving the favorites object
             Favorites favorites = getGson().fromJson(favoritesJSON, Favorites.class);
 
-            Toast.makeText(this.getApplicationContext(), "Favorite Count : "  + favorites.getCount(),
+            Toast.makeText(this.getApplicationContext(), "Favorite Count : " + favorites.getCount(),
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -245,10 +255,14 @@ public class SearchActivity extends AppCompatActivity {
             {
                 Toast.makeText(this.getApplicationContext(), "Already bookmarked!",
                         Toast.LENGTH_SHORT).show();
+                isFavorite = true;
             }
-
-
+            else
+            {
+                isFavorite = false;
+            }
         }
+
     }
 
     // Would create the gson object, if needed
