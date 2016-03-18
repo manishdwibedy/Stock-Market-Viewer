@@ -2,18 +2,26 @@ package com.example.manishdwibedy.stockmarketviewer;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Toast;
+
+import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
+import com.example.manishdwibedy.stockmarketviewer.util.Constant;
+import com.google.gson.Gson;
 
 
 public class MainActivity extends AppCompatActivity{
 
     private final String TAG = "MainActivity";
     SearchView searchView;
+    private Gson gson;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,6 +29,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        gson = new Gson();
     }
 
     @Override
@@ -45,6 +54,36 @@ public class MainActivity extends AppCompatActivity{
         int id = item.getItemId();
 
         return super.onOptionsItemSelected(item);
+    }
+
+    // This handler would clear all the preferences stored!
+    public void resetPreferences(View view)
+    {
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+
+        // Resetting the preference
+        preferences.edit().clear().apply();
+    }
+
+    public void getFavoriteCount(View view) {
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+        // The favorites should have been initialized already!
+        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                .equals(Constant.favoritesEmpty)) {
+            // Retrieving the favorites JSON representation
+            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
+
+            // Retrieving the favorites object
+            Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
+
+            int count = favorites.getCount();
+
+            Toast.makeText(this.getApplicationContext(), "Hey!!" + count,
+                    Toast.LENGTH_SHORT).show();
+
+        }
     }
 
 }
