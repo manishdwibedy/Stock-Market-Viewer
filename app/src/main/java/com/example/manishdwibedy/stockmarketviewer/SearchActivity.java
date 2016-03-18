@@ -23,6 +23,7 @@ public class SearchActivity extends AppCompatActivity {
     private final String TAG = "SearchActivity";
 
     Drawable star = null;
+    private String stockName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +88,9 @@ public class SearchActivity extends AppCompatActivity {
 
             // Set the title name to reflect the stock's name
             setTitle(stockName);
+
+            // Storing the stock name as a variable to be used later!
+            this.stockName = stockName;
         }
     }
 
@@ -112,19 +116,21 @@ public class SearchActivity extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case R.id.bookmark:
+
+                // Set the stock as a favourite
                 if(item.getIcon().getConstantState().equals(star.getConstantState()))
                 {
                     item.setIcon(R.drawable.star_filled);
-                    Toast.makeText(this.getApplicationContext(), "Bookmarked!",
+                    Toast.makeText(this.getApplicationContext(), "Bookmarked " + stockName + "!!",
                             Toast.LENGTH_SHORT).show();
-
                 }
+
+                // Removing the stock as a favourite
                 else
                 {
                     item.setIcon(R.drawable.star);
-                    Toast.makeText(this.getApplicationContext(), "Removed the bookmark!",
+                    Toast.makeText(this.getApplicationContext(), "Removed "  + stockName + "!!",
                             Toast.LENGTH_SHORT).show();
-
                 }
 
                 return true;
