@@ -42,7 +42,6 @@ public class SearchActivity extends AppCompatActivity {
     // Stock Favorite
     private boolean isFavorite = false;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,12 +53,14 @@ public class SearchActivity extends AppCompatActivity {
         // Getting the intent's action
         final Intent queryIntent = getIntent();
         final String queryAction = queryIntent.getAction();
-        if (Intent.ACTION_SEARCH.equals(queryAction))
+        if (Intent.ACTION_VIEW.equals(queryAction))
         {
             this.handleIntent(queryIntent);
         }
         else
         {
+            // Go back to the previous activity
+            finish();
             Log.d(TAG, "Create intent NOT from search");
         }
 
@@ -72,6 +73,8 @@ public class SearchActivity extends AppCompatActivity {
         // seting up favourites
         setupFavorites();
     }
+
+
 
     private void setupTabs() {
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
@@ -107,7 +110,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private void handleIntent(Intent intent) {
 
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+        if (Intent.ACTION_VIEW.equals(intent.getAction())) {
 
             // Getting the stock's name
             String stockData = intent.getDataString();
@@ -133,7 +136,7 @@ public class SearchActivity extends AppCompatActivity {
         super.onNewIntent(queryIntent);
 
         final String queryAction = queryIntent.getAction();
-        if (Intent.ACTION_SEARCH.equals(queryAction)) {
+        if (Intent.ACTION_VIEW.equals(queryAction)) {
             this.handleIntent(queryIntent);
         }
     }
@@ -178,7 +181,7 @@ public class SearchActivity extends AppCompatActivity {
     // Setting up favorites for the first time only
     private void setupFavorites(){
         SharedPreferences preferences = this.getApplicationContext().
-                                    getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
 
         // If the favourites has not been initialized, then initialize it here
         if (preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
