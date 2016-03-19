@@ -33,8 +33,8 @@ public class SearchActivity extends AppCompatActivity {
     // The drawable star, which represents where the stock is a favorite or NOT!
     Drawable star = null;
 
-    // Storing the stock's name
-    private String stockName;
+    // Storing the stock object
+    private Stock stock;
 
     // GSON to be used for serializing and deserializing objects
     private Gson gson;
@@ -115,14 +115,14 @@ public class SearchActivity extends AppCompatActivity {
             Stock stock = new Gson().fromJson(stockData, Stock.class);
 
             // Showing the stock name
-            Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + stockName,
+            Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + stock.getName(),
                     Toast.LENGTH_SHORT).show();
 
             // Set the title name to reflect the stock's name
             setTitle(stock.getName());
 
-            // Storing the stock name as a variable to be used later!
-            this.stockName = stock.getName();
+            // Storing the stock object as a variable to be used later!
+            this.stock = stock;
 
             isStockFavorite();
         }
@@ -156,7 +156,7 @@ public class SearchActivity extends AppCompatActivity {
                 {
                     addToFavorites();
                     item.setIcon(R.drawable.star_filled);
-                    Toast.makeText(this.getApplicationContext(), "Bookmarked " + stockName + "!!",
+                    Toast.makeText(this.getApplicationContext(), "Bookmarked " + stock.getName() + "!!",
                             Toast.LENGTH_SHORT).show();
                 }
 
@@ -165,7 +165,7 @@ public class SearchActivity extends AppCompatActivity {
                 {
                     removeFromFavorites();
                     item.setIcon(R.drawable.star);
-                    Toast.makeText(this.getApplicationContext(), "Removed "  + stockName + "!!",
+                    Toast.makeText(this.getApplicationContext(), "Removed "  + stock.getName() + "!!",
                             Toast.LENGTH_SHORT).show();
                 }
 
@@ -223,10 +223,6 @@ public class SearchActivity extends AppCompatActivity {
             favorites.setCount(favorites.getCount() + 1);
 
             // Adding it to the favourite list
-            Stock stock = new Stock();
-            stock.setName(stockName);
-            stock.setExchange(stockName);
-            stock.setSymbol(stockName);
             favorites.getFavoriteList().add(stock);
 
             // Storing the updated favorites for future usage!
@@ -251,11 +247,6 @@ public class SearchActivity extends AppCompatActivity {
             favorites.setCount(favorites.getCount() - 1);
 
             // Removing it from the favourite list
-            Stock stock = new Stock();
-            stock.setName(stockName);
-            stock.setExchange(stockName);
-            stock.setSymbol(stockName);
-
             favorites.getFavoriteList().remove(stock);
 
             // Storing the updated favorites for future usage!
@@ -279,11 +270,6 @@ public class SearchActivity extends AppCompatActivity {
             Favorites favorites = getGson().fromJson(favoritesJSON, Favorites.class);
 
             // The current stock object
-            Stock stock = new Stock();
-            stock.setName(stockName);
-            stock.setExchange(stockName);
-            stock.setSymbol(stockName);
-
             if (favorites.getFavoriteList().contains(stock))
             {
                 Toast.makeText(this.getApplicationContext(), "Already bookmarked!",
