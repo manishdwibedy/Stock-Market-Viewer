@@ -6,6 +6,7 @@ package com.example.manishdwibedy.stockmarketviewer;
 
 import android.app.SearchManager;
 import android.content.ContentValues;
+import android.content.Intent;
 import android.content.SearchRecentSuggestionsProvider;
 import android.database.Cursor;
 import android.database.MatrixCursor;
@@ -96,8 +97,8 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
         return new Object[] { id, // _id
                 data.getName(),                 // text1
                 secondaryText,                  // text 2
-                stockData,                 // intent data
-                "android.intent.action.SEARCH", // action
+                stockData,                      // intent data
+                Intent.ACTION_VIEW,             // action
                 SearchManager.SUGGEST_NEVER_MAKE_SHORTCUT };
     }
 
