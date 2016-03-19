@@ -28,12 +28,13 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
 
     // Various columns to be displayed
     private static final String[] COLUMNS = {
-            "_id",                                          // must include this column
-            SearchManager.SUGGEST_COLUMN_TEXT_1,            // primary line of text
-            SearchManager.SUGGEST_COLUMN_TEXT_2,            // secondary line of text
-            SearchManager.SUGGEST_COLUMN_INTENT_DATA,       // passed via intent
-            SearchManager.SUGGEST_COLUMN_INTENT_ACTION,     // suggestion's intent
-            SearchManager.SUGGEST_COLUMN_SHORTCUT_ID        // search suggestion shortcut
+            "_id",                                                  // must include this column
+            SearchManager.SUGGEST_COLUMN_TEXT_1,                    // primary line of text
+            SearchManager.SUGGEST_COLUMN_TEXT_2,                    // secondary line of text
+            SearchManager.SUGGEST_COLUMN_INTENT_DATA,               // passed via intent
+            SearchManager.SUGGEST_COLUMN_INTENT_ACTION,             // suggestion's intent
+            SearchManager.SUGGEST_COLUMN_SHORTCUT_ID,               // search suggestion shortcut
+            SearchManager.SUGGEST_COLUMN_SPINNER_WHILE_REFRESHING   // Show spinner
     };
 
     public SearchSuggestionsProvider() {
@@ -99,7 +100,9 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
                 secondaryText,                  // text 2
                 stockData,                      // intent data
                 Intent.ACTION_VIEW,             // action
-                SearchManager.SUGGEST_NEVER_MAKE_SHORTCUT };
+                SearchManager.SUGGEST_NEVER_MAKE_SHORTCUT,
+                true
+        };
     }
 
 }
