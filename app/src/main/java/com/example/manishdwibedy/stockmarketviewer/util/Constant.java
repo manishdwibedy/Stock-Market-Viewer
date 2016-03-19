@@ -4,8 +4,16 @@ package com.example.manishdwibedy.stockmarketviewer.util;
  * Created by manishdwibedy on 3/17/16.
  */
 public interface Constant {
+
+    // For storing favorites
     String preferences = "Preferences";
 
     String favouritesKey = "Favorites";
     String favoritesEmpty = "EMPTY";
+
+    // For storing any error message
+    String errorStates = "Error";
+    String errorKey = "isError";
+    String errorEmpty = "";
+
 }

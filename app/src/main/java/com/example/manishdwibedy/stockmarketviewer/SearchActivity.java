@@ -60,6 +60,8 @@ public class SearchActivity extends AppCompatActivity {
         else
         {
             // Go back to the previous activity
+            String errorMessage = "Please select a suggestion!";
+            setErrorMessage(errorMessage);
             finish();
             Log.d(TAG, "Create intent NOT from search");
         }
@@ -74,7 +76,23 @@ public class SearchActivity extends AppCompatActivity {
         setupFavorites();
     }
 
+    private void setErrorMessage(String errorMessage) {
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.errorStates, Context.MODE_PRIVATE);
 
+        // If the error message has not been initialized, then initialize it here
+        if (preferences.getString(Constant.errorKey, Constant.errorEmpty)
+                .equals(Constant.errorEmpty))
+        {
+
+            preferences.edit().putString(Constant.errorKey, errorMessage).apply();
+        }
+        else
+        {
+            // Storing the updated error message for future usage!
+            preferences.edit().putString(Constant.errorKey, errorMessage).apply();
+        }
+    }
 
     private void setupTabs() {
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);

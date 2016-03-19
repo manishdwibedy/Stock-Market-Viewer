@@ -47,6 +47,40 @@ public class MainActivity extends AppCompatActivity{
     }
 
     @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        String errorMessage = getErrorMessage();
+        // Error Message is present
+        if(!errorMessage.equals(Constant.errorEmpty))
+        {
+            Toast.makeText(this.getApplicationContext(), errorMessage,
+                    Toast.LENGTH_SHORT).show();
+        }
+        // Check if any error message is present
+    }
+
+    private String getErrorMessage() {
+        String errorMessage = Constant.errorEmpty;
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.errorStates, Context.MODE_PRIVATE);
+
+        // If the error message has not been initialized, then initialize it here
+        if (preferences.getString(Constant.errorKey, Constant.errorEmpty)
+                .equals(Constant.errorEmpty))
+        {
+            preferences.edit().putString(Constant.errorKey, Constant.errorEmpty).apply();
+        }
+        else
+        {
+            // Storing the updated error message for future usage!
+            errorMessage = preferences.getString(Constant.errorKey, Constant.errorEmpty);
+        }
+        return errorMessage;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
