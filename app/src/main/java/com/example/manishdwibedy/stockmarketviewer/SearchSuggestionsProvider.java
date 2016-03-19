@@ -28,6 +28,7 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
     private static final String[] COLUMNS = {
             "_id",                                          // must include this column
             SearchManager.SUGGEST_COLUMN_TEXT_1,            // primary line of text
+            SearchManager.SUGGEST_COLUMN_TEXT_2,            // secondary line of text
             SearchManager.SUGGEST_COLUMN_INTENT_DATA,       // passed via intent
             SearchManager.SUGGEST_COLUMN_INTENT_ACTION,     // suggestion's intent
             SearchManager.SUGGEST_COLUMN_SHORTCUT_ID        // search suggestion shortcut
@@ -58,11 +59,11 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
                 // If the Stock name matches
                 if(data.getName().toLowerCase().contains(query.toLowerCase()))
                 {
-                    cursor.addRow(createRow(new Integer(n++), data.getName()));
+                    cursor.addRow(createRow(new Integer(n++), data));
                 }
                 else if(data.getSymbol().toLowerCase().contains(query.toLowerCase()))
                 {
-                    cursor.addRow(createRow(new Integer(n++), data.getName()));
+                    cursor.addRow(createRow(new Integer(n++), data));
                 }
             }
         } catch (Exception e) {
@@ -88,10 +89,12 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
     }
 
     // Creating our stock object
-    private Object[] createRow(Integer id, String text1) {
+    private Object[] createRow(Integer id, Stock data) {
+        String secondaryText = data.getSymbol() + " (" + data.getExchange() + ")";
         return new Object[] { id, // _id
-                text1, // text1
-                text1,
+                data.getName(),              // text1
+                secondaryText,              // text 2
+                data.getName(),              // intent data
                 "android.intent.action.SEARCH", // action
                 SearchManager.SUGGEST_NEVER_MAKE_SHORTCUT };
     }
