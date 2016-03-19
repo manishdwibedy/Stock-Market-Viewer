@@ -4,8 +4,6 @@
     android:hint="@string/search_hint"
     android:icon="@drawable/stocks"
     android:searchSuggestThreshold="3"
-    android:voiceSearchMode=
-        "showVoiceSearchButton|launchRecognizer"
     android:searchSuggestAuthority="com.example.manishdwibedy.stockmarketviewer.SearchSuggestionsProvider"
     android:searchSuggestSelection=" ? "
     android:searchSuggestIntentAction="android.intent.action.VIEW">
