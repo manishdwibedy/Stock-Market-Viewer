@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.GetStockData;
+import com.google.gson.Gson;
 
 public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
     static final String TAG = SearchSuggestionsProvider.class.getSimpleName();
@@ -91,10 +92,11 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
     // Creating our stock object
     private Object[] createRow(Integer id, Stock data) {
         String secondaryText = data.getSymbol() + " (" + data.getExchange() + ")";
+        String stockData = new Gson().toJson(data);
         return new Object[] { id, // _id
-                data.getName(),              // text1
-                secondaryText,              // text 2
-                data.getName(),              // intent data
+                data.getName(),                 // text1
+                secondaryText,                  // text 2
+                stockData,                 // intent data
                 "android.intent.action.SEARCH", // action
                 SearchManager.SUGGEST_NEVER_MAKE_SHORTCUT };
     }

@@ -110,17 +110,19 @@ public class SearchActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 
             // Getting the stock's name
-            String stockName = intent.getDataString();
+            String stockData = intent.getDataString();
+
+            Stock stock = new Gson().fromJson(stockData, Stock.class);
 
             // Showing the stock name
             Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + stockName,
                     Toast.LENGTH_SHORT).show();
 
             // Set the title name to reflect the stock's name
-            setTitle(stockName);
+            setTitle(stock.getName());
 
             // Storing the stock name as a variable to be used later!
-            this.stockName = stockName;
+            this.stockName = stock.getName();
 
             isStockFavorite();
         }
