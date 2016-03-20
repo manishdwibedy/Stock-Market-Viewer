@@ -143,6 +143,7 @@ public class MainActivity extends AppCompatActivity{
 
             listView.setAdapter(favoritesAdapter);
 
+            // Moving to the SearchActivity when a stock is selected from the favorite list
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -152,9 +153,10 @@ public class MainActivity extends AppCompatActivity{
                     Intent intent = new Intent(getBaseContext(), SearchActivity.class);
                     intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
                     intent.putExtra(Constant.stockData, new Gson().toJson(selectedStock));
+
+                    // Start the activity
                     startActivity(intent);
 
-                    //Toast.makeText(getApplicationContext(),"You Clicked "+selectedStock.getName(),Toast.LENGTH_SHORT).show();
                 }
             });
 
