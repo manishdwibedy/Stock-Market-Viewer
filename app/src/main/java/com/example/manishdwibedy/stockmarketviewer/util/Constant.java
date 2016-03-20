@@ -16,4 +16,9 @@ public interface Constant {
     String errorKey = "isError";
     String errorEmpty = "";
 
+    // For selection of favorite stock
+    String favoriteSelectedKey = "Favorites";
+    String favoriteSelectedValue = "Selelected";
+    String stockData = "stockData";
+
 }

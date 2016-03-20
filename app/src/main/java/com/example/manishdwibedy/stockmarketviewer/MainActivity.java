@@ -2,6 +2,7 @@ package com.example.manishdwibedy.stockmarketviewer;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
@@ -146,7 +147,14 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                     Stock selectedStock = (Stock) listView.getItemAtPosition(i);
-                    Toast.makeText(getApplicationContext(),"You Clicked "+selectedStock.getName(),Toast.LENGTH_SHORT).show();
+
+                    // Moving to show the selected stock
+                    Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                    intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
+                    intent.putExtra(Constant.stockData, new Gson().toJson(selectedStock));
+                    startActivity(intent);
+
+                    //Toast.makeText(getApplicationContext(),"You Clicked "+selectedStock.getName(),Toast.LENGTH_SHORT).show();
                 }
             });
 

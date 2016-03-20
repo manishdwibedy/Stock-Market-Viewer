@@ -57,6 +57,14 @@ public class SearchActivity extends AppCompatActivity {
         {
             this.handleIntent(queryIntent);
         }
+        // a favorite stock has been selected
+        else if(queryIntent.getExtras().getString(Constant.favoriteSelectedKey).equals(Constant.favoriteSelectedValue))
+        {
+            Stock stock = new Gson().fromJson(queryIntent.getExtras().getString(Constant.stockData), Stock.class);
+            this.stock = stock;
+
+            render(false);
+        }
         else
         {
             // Go back to the previous activity
@@ -120,7 +128,7 @@ public class SearchActivity extends AppCompatActivity {
 
         if(isFavorite)
         {
-            menu.findItem(R.id.bookmark).setIcon(R.drawable.star_filled);
+            markAsFavorite(menu);
         }
 
         return true;
@@ -139,14 +147,29 @@ public class SearchActivity extends AppCompatActivity {
             Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + stock.getName(),
                     Toast.LENGTH_SHORT).show();
 
-            // Set the title name to reflect the stock's name
-            setTitle(stock.getName());
-
             // Storing the stock object as a variable to be used later!
             this.stock = stock;
 
+            render(true);
+        }
+    }
+
+    private void render(boolean checkIfFavorite)
+    {
+        // Set the title name to reflect the stock's name
+        setTitle(stock.getName());
+
+        // Need to check whether the stock is marked as favorite
+        if (checkIfFavorite)
+        {
+            // Check if stock is a favorite and render the bookmark symbol accordingly
             isStockFavorite();
         }
+        else
+        {
+            isFavorite = true;
+        }
+
     }
 
     @Override
@@ -303,6 +326,11 @@ public class SearchActivity extends AppCompatActivity {
             }
         }
 
+    }
+
+    private void markAsFavorite(Menu menu)
+    {
+        menu.findItem(R.id.bookmark).setIcon(R.drawable.star_filled);
     }
 
     // Would create the gson object, if needed
