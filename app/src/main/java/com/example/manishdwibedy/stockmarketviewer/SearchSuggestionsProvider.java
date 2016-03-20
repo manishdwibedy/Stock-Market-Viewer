@@ -14,7 +14,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
-import com.example.manishdwibedy.stockmarketviewer.util.GetStockData;
+import com.example.manishdwibedy.stockmarketviewer.util.GetStock;
 import com.google.gson.Gson;
 
 public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
@@ -53,7 +53,7 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
         MatrixCursor cursor = new MatrixCursor(COLUMNS);
 
         // Getting the stocks from the API call
-        Stock[] dataList = GetStockData.getStocks(query);
+        Stock[] dataList = GetStock.getStocks(query);
 
         // Addding our stock data to cursor
         try {

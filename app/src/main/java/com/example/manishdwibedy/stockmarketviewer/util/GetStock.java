@@ -7,7 +7,7 @@ import com.google.gson.GsonBuilder;
 /**
  * Created by manishdwibedy on 3/15/16.
  */
-public class GetStockData {
+public class GetStock {
     public static Stock[] getStocks(String query){
         //List<Stock> stocks = new ArrayList<Stock>();
         Stock[] stocks = null;
