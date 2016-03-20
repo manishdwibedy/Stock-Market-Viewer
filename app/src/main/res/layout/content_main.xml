@@ -24,5 +24,6 @@
         android:id="@+id/favoritesListView"
         android:layout_below="@+id/textView"
         android:layout_margin="10dp"
+        android:divider="@android:color/transparent"
         android:dividerHeight="10.0sp"/>
 </RelativeLayout>
