@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
+import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
 
 
@@ -204,6 +205,7 @@ public class MainActivity extends AppCompatActivity{
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 favoritesAdapter.getData().remove(selectedStock);
+                Utility.removeFromFavorites(MainActivity.this, selectedStock);
                 favoritesAdapter.notifyDataSetChanged();
             }
 

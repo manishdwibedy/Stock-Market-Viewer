@@ -21,6 +21,7 @@ import com.example.manishdwibedy.stockmarketviewer.fragments.TabsPagerAdapter;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
+import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
@@ -207,7 +208,7 @@ public class SearchActivity extends AppCompatActivity {
                 // Removing the stock as a favourite
                 else
                 {
-                    removeFromFavorites();
+                    Utility.removeFromFavorites(SearchActivity.this, stock);
                     item.setIcon(R.drawable.star);
                     Toast.makeText(this.getApplicationContext(), "Removed "  + stock.getName() + "!!",
                             Toast.LENGTH_SHORT).show();
@@ -268,31 +269,6 @@ public class SearchActivity extends AppCompatActivity {
 
             // Storing the updated favorites for future usage!
             preferences.edit().putString(Constant.favouritesKey, getGson().toJson(favorites)).apply();
-        }
-    }
-
-    private void removeFromFavorites() {
-        SharedPreferences preferences = this.getApplicationContext().
-                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
-
-        // The favorites should have been initialized already!
-        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
-                .equals(Constant.favoritesEmpty)) {
-
-            // Retrieving the favorites JSON representation
-            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
-
-            // Retrieving the favorites object
-            Favorites favorites = getGson().fromJson(favoritesJSON, Favorites.class);
-
-            favorites.setCount(favorites.getCount() - 1);
-
-            // Removing it from the favourite list
-            favorites.getFavoriteList().remove(stock);
-
-            // Storing the updated favorites for future usage!
-            preferences.edit().putString(Constant.favouritesKey, getGson().toJson(favorites)).apply();
-
         }
     }
 
