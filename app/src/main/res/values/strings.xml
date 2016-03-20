@@ -6,4 +6,6 @@
     <string name="title_activity_search">SearchActivity</string>
     <string name="menu_search">Search</string>
     <string name="search_result">Results</string>
+
+    <string name="favorite_label">Favorites</string>
 </resources>
