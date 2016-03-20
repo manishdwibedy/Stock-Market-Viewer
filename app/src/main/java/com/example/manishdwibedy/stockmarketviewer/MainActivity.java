@@ -26,23 +26,8 @@ public class MainActivity extends AppCompatActivity{
     private final String TAG = "MainActivity";
     SearchView searchView;
     private Gson gson;
-
-    //
     private ListView listView;
-    private String names[] = {
-            "HTML",
-            "CSS",
-            "Java Script",
-            "Wordpress"
-    };
 
-    private String desc[] = {
-            "The Powerful Hypter Text Markup Language 5",
-            "Cascading Style Sheets",
-            "Code with Java Script",
-            "Manage your content with Wordpress"
-    };
-    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,19 +42,6 @@ public class MainActivity extends AppCompatActivity{
         gson = new Gson();
 
         setupFavorites();
-        //
-//        FavoritesAdapter customList = new FavoritesAdapter(this, names, desc);
-//
-//        listView = (ListView) findViewById(R.id.listView);
-//        listView.setAdapter(customList);
-//
-//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//                Toast.makeText(getApplicationContext(),"You Clicked "+names[i],Toast.LENGTH_SHORT).show();
-//            }
-//        });
-        //
     }
 
     @Override
