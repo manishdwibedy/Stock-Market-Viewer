@@ -122,36 +122,6 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
-    // This handler would clear all the preferences stored!
-    public void resetPreferences(View view)
-    {
-        SharedPreferences preferences = this.getApplicationContext().
-                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
-
-        // Resetting the preference
-        preferences.edit().clear().apply();
-    }
-
-    public void getFavoriteCount(View view) {
-        SharedPreferences preferences = this.getApplicationContext().
-                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
-        // The favorites should have been initialized already!
-        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
-                .equals(Constant.favoritesEmpty)) {
-            // Retrieving the favorites JSON representation
-            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
-
-            // Retrieving the favorites object
-            Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
-
-            int count = favorites.getCount();
-
-            Toast.makeText(this.getApplicationContext(), "Hey!!" + count,
-                    Toast.LENGTH_SHORT).show();
-
-        }
-    }
-
     // Setting up the favorites list view!
     private void setupFavorites()
     {
