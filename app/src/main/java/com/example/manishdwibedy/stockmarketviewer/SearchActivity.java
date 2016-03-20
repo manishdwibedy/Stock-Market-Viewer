@@ -241,9 +241,6 @@ public class SearchActivity extends AppCompatActivity {
 
             // Retrieving the favorites object
             Favorites favorites = getGson().fromJson(favoritesJSON, Favorites.class);
-
-            Toast.makeText(this.getApplicationContext(), "Favorite Count : " + favorites.getCount(),
-                    Toast.LENGTH_SHORT).show();
         }
 
     }
