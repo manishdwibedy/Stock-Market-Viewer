@@ -21,7 +21,7 @@ public class FavoritesAdapter extends ArrayAdapter<Stock> {
     private List<Stock> data;
 
     public FavoritesAdapter(Activity context, Favorites data) {
-        super(context, R.layout.list_layout, data.getFavoriteList());
+        super(context, R.layout.favorites_layout, data.getFavoriteList());
         this.context = context;
         this.data = data.getFavoriteList();
     }
@@ -29,7 +29,7 @@ public class FavoritesAdapter extends ArrayAdapter<Stock> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
-        View listViewItem = inflater.inflate(R.layout.list_layout, null, true);
+        View listViewItem = inflater.inflate(R.layout.favorites_layout, null, true);
         TextView stockSymbol = (TextView) listViewItem.findViewById(R.id.stockSymbol);
         TextView stockName = (TextView) listViewItem.findViewById(R.id.stockName);
         TextView stockData = (TextView) listViewItem.findViewById(R.id.stockData);

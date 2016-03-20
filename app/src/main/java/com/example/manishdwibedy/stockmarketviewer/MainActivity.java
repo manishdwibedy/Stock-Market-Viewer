@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity{
             // Retrieving the favorites object
             Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
 
-            listView = (ListView) findViewById(R.id.listView);
+            listView = (ListView) findViewById(R.id.favoritesListView);
 
             FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, favorites);
 
