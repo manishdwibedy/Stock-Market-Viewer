@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
+import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.google.gson.Gson;
 
@@ -25,7 +26,6 @@ public class MainActivity extends AppCompatActivity{
     private final String TAG = "MainActivity";
     SearchView searchView;
     private Gson gson;
-
 
     //
     private ListView listView;
@@ -56,18 +56,19 @@ public class MainActivity extends AppCompatActivity{
 
         gson = new Gson();
 
+        setupFavorites();
         //
-        CustomList customList = new CustomList(this, names, desc);
-
-        listView = (ListView) findViewById(R.id.listView);
-        listView.setAdapter(customList);
-
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(getApplicationContext(),"You Clicked "+names[i],Toast.LENGTH_SHORT).show();
-            }
-        });
+//        FavoritesAdapter customList = new FavoritesAdapter(this, names, desc);
+//
+//        listView = (ListView) findViewById(R.id.listView);
+//        listView.setAdapter(customList);
+//
+//        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//                Toast.makeText(getApplicationContext(),"You Clicked "+names[i],Toast.LENGTH_SHORT).show();
+//            }
+//        });
         //
     }
 
@@ -175,6 +176,37 @@ public class MainActivity extends AppCompatActivity{
 
             Toast.makeText(this.getApplicationContext(), "Hey!!" + count,
                     Toast.LENGTH_SHORT).show();
+
+        }
+    }
+
+    // Setting up the favorites list view!
+    private void setupFavorites()
+    {
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+        // The favorites should have been initialized already!
+        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                .equals(Constant.favoritesEmpty)) {
+            // Retrieving the favorites JSON representation
+            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
+
+            // Retrieving the favorites object
+            Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
+
+            listView = (ListView) findViewById(R.id.listView);
+
+            FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, favorites);
+
+            listView.setAdapter(favoritesAdapter);
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Stock selectedStock = (Stock) listView.getItemAtPosition(i);
+                    Toast.makeText(getApplicationContext(),"You Clicked "+selectedStock.getName(),Toast.LENGTH_SHORT).show();
+                }
+            });
 
         }
     }
