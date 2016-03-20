@@ -1,7 +1,9 @@
 package com.example.manishdwibedy.stockmarketviewer;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -28,6 +30,12 @@ public class MainActivity extends AppCompatActivity{
     SearchView searchView;
     private Gson gson;
     private ListView listView;
+
+    // Represented whether a stock was long presses for options
+    private boolean isStockLongPressed = false;
+
+    //
+    FavoritesAdapter favoritesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,7 +147,7 @@ public class MainActivity extends AppCompatActivity{
 
             listView = (ListView) findViewById(R.id.favoritesListView);
 
-            FavoritesAdapter favoritesAdapter = new FavoritesAdapter(this, favorites);
+            this.favoritesAdapter = new FavoritesAdapter(this, favorites);
 
             listView.setAdapter(favoritesAdapter);
 
@@ -147,20 +155,69 @@ public class MainActivity extends AppCompatActivity{
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Stock selectedStock = (Stock) listView.getItemAtPosition(i);
 
-                    // Moving to show the selected stock
-                    Intent intent = new Intent(getBaseContext(), SearchActivity.class);
-                    intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
-                    intent.putExtra(Constant.stockData, new Gson().toJson(selectedStock));
+                    if (!isStockLongPressed) {
+                        Stock selectedStock = (Stock) listView.getItemAtPosition(i);
 
-                    // Start the activity
-                    startActivity(intent);
+                        // Moving to show the selected stock
+                        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                        intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
+                        intent.putExtra(Constant.stockData, new Gson().toJson(selectedStock));
+
+                        // Start the activity
+                        startActivity(intent);
+
+                        isStockLongPressed = false;
+                    }
+
 
                 }
             });
 
+            // On Long press,
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view,
+                                               int position, long id) {
+
+                    Stock selectedStock = (Stock) listView.getItemAtPosition(position);
+                    isStockLongPressed = true;
+                    showDialog(selectedStock);
+                    return false;
+                }
+            });
+
         }
+    }
+
+    // This method would show the dialog allowing the user to delete the stock
+    // from the favorites
+    private void showDialog(final Stock selectedStock)
+    {
+
+        AlertDialog.Builder alertDialog=new AlertDialog.Builder(MainActivity.this);
+
+        alertDialog.setMessage("Want to delete " + selectedStock.getName() + " from favorites?");
+        alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                favoritesAdapter.getData().remove(selectedStock);
+                favoritesAdapter.notifyDataSetChanged();
+            }
+
+        });
+
+        alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Cancelled deletion!
+            }
+
+        });
+
+        alertDialog.show();
     }
 
 }
