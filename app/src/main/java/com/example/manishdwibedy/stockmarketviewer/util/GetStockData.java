@@ -24,6 +24,8 @@ public class GetStockData {
 
     public static void main(String[] args){
         StockData data = getStockData("AAPL");
-        System.out.print(data.getChange());
+        System.out.print(Utility.to2DecimalPlaces(data.getChange()));
+
+        int x =0;
     }
 }
