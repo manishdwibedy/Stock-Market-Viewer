@@ -3,8 +3,8 @@ package com.example.manishdwibedy.stockmarketviewer.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
-import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.google.gson.Gson;
 
 import java.text.DecimalFormat;
@@ -38,7 +38,7 @@ public class Utility {
         }
     }
 
-    public static boolean removeFromFavorites(Context context, Stock stock)
+    public static boolean removeFromFavorites(Context context, FavoriteStock stock)
     {
         SharedPreferences preferences = context.
                 getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);

@@ -7,7 +7,7 @@ import java.util.List;
  */
 public class Favorites {
     private int count;
-    private List<Stock> favoriteList;
+    private List<FavoriteStock> favoriteList;
 
     public int getCount() {
         return count;
@@ -17,11 +17,11 @@ public class Favorites {
         this.count = count;
     }
 
-    public List<Stock> getFavoriteList() {
+    public List<FavoriteStock> getFavoriteList() {
         return favoriteList;
     }
 
-    public void setFavoriteList(List<Stock> favoriteList) {
+    public void setFavoriteList(List<FavoriteStock> favoriteList) {
         this.favoriteList = favoriteList;
     }
 }

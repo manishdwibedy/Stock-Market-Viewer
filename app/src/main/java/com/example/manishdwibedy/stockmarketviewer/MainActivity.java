@@ -24,7 +24,6 @@ import android.widget.Toast;
 import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetFavoriteStockAsync;
 import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
-import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
@@ -162,7 +161,7 @@ public class MainActivity extends AppCompatActivity{
             final Activity context = this;
 
             final ArrayList<String> stockSymbols = new ArrayList<String>();
-            for(Stock stock: favorites.getFavoriteList())
+            for(FavoriteStock stock: favorites.getFavoriteList())
                 stockSymbols.add(stock.getSymbol());
 
             // Doing the async task on a new thread.
@@ -214,7 +213,7 @@ public class MainActivity extends AppCompatActivity{
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 if (!isStockLongPressed) {
-                    Stock selectedStock = (Stock) listView.getItemAtPosition(i);
+                    FavoriteStock selectedStock = (FavoriteStock) listView.getItemAtPosition(i);
 
                     // Moving to show the selected stock
                     Intent intent = new Intent(getBaseContext(), SearchActivity.class);
@@ -236,7 +235,7 @@ public class MainActivity extends AppCompatActivity{
                 public boolean onItemLongClick(AdapterView<?> parent, View view,
                                                int position, long id) {
 
-                    Stock selectedStock = (Stock) listView.getItemAtPosition(position);
+                    FavoriteStock selectedStock = (FavoriteStock) listView.getItemAtPosition(position);
                     isStockLongPressed = true;
                     showDialog(selectedStock);
                     return false;
@@ -248,7 +247,7 @@ public class MainActivity extends AppCompatActivity{
 
     // This method would show the dialog allowing the user to delete the stock
     // from the favorites
-    private void showDialog(final Stock selectedStock)
+    private void showDialog(final FavoriteStock selectedStock)
     {
 
         AlertDialog.Builder alertDialog=new AlertDialog.Builder(MainActivity.this);

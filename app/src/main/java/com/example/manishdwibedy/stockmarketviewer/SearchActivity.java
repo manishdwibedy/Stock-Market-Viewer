@@ -18,8 +18,8 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.manishdwibedy.stockmarketviewer.fragments.TabsPagerAdapter;
+import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
-import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
@@ -35,7 +35,7 @@ public class SearchActivity extends AppCompatActivity {
     Drawable star = null;
 
     // Storing the stock object
-    private Stock stock;
+    private FavoriteStock stock;
 
     // GSON to be used for serializing and deserializing objects
     private Gson gson;
@@ -61,7 +61,7 @@ public class SearchActivity extends AppCompatActivity {
         // a favorite stock has been selected
         else if(queryIntent.getExtras().getString(Constant.favoriteSelectedKey).equals(Constant.favoriteSelectedValue))
         {
-            Stock stock = new Gson().fromJson(queryIntent.getExtras().getString(Constant.stockData), Stock.class);
+            FavoriteStock stock = new Gson().fromJson(queryIntent.getExtras().getString(Constant.stockData), FavoriteStock.class);
             this.stock = stock;
 
             render(false);
@@ -142,7 +142,7 @@ public class SearchActivity extends AppCompatActivity {
             // Getting the stock's name
             String stockData = intent.getDataString();
 
-            Stock stock = new Gson().fromJson(stockData, Stock.class);
+            FavoriteStock stock = new Gson().fromJson(stockData, FavoriteStock.class);
 
             // Showing the stock name
             Toast.makeText(this.getApplicationContext(), "ACTION_SEARCH : " + stock.getName(),
@@ -231,7 +231,7 @@ public class SearchActivity extends AppCompatActivity {
         {
             Favorites favorites = new Favorites();
             favorites.setCount(0);
-            favorites.setFavoriteList(new ArrayList<Stock>());
+            favorites.setFavoriteList(new ArrayList<FavoriteStock>());
 
             preferences.edit().putString(Constant.favouritesKey, getGson().toJson(favorites)).apply();
         }
