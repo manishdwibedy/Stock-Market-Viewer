@@ -19,7 +19,10 @@ import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetStockDataAsync;
 import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.StockData;
 import com.example.manishdwibedy.stockmarketviewer.model.StockDetail;
+import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -80,10 +83,28 @@ public class PageFragment extends Fragment {
                     final StockData stockData = mTask.execute(symbol).get();
 
                     final List<StockDetail> list = new ArrayList<StockDetail>();
-                    StockDetail stockDetail = new StockDetail();
-                    stockDetail.setName("name");
-                    stockDetail.setValue("value");
-                    list.add(stockDetail);
+
+                    Class objClass= stockData.getClass();
+                    Method[] methods = objClass.getMethods();
+                    for (Method method:methods)
+                    {
+                        // Only consider the get methods
+                        if(method.getName().startsWith("get"))
+                        {
+                            StockDetail stockDetail = new StockDetail();
+                            String property = method.getName().substring(3);
+
+                            if(!property.equalsIgnoreCase("Class"))
+                            {
+                                String propertyValue = (String) method.invoke(stockData);
+                                stockDetail.setName(property.toUpperCase());
+                                stockDetail.setValue(Utility.to2DecimalPlaces(propertyValue));
+                                list.add(stockDetail);
+                            }
+
+                        }
+                        System.out.println("Public method found: " +  method.toString());
+                    }
 
                     // Setting the list view's adapter
                     Thread thread = new Thread(){
@@ -111,6 +132,10 @@ public class PageFragment extends Fragment {
                 catch (ExecutionException e)
                 {
                     Log.e(TAG, e.getMessage());
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
             }
         };

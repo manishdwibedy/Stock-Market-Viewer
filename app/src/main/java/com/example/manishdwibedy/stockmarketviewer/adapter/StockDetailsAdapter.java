@@ -34,9 +34,9 @@ public class StockDetailsAdapter extends ArrayAdapter<StockDetail> {
         TextView nameTextView = (TextView) listViewItem.findViewById(R.id.details_name);
         TextView valueTextView = (TextView) listViewItem.findViewById(R.id.details_value);
 
-        StockDetail stock = data.get(position);
-        nameTextView.setText("Name");
-        valueTextView.setText("Value");
+        StockDetail detail = data.get(position);
+        nameTextView.setText(detail.getName());
+        valueTextView.setText(detail.getValue());
 
         return  listViewItem;
     }

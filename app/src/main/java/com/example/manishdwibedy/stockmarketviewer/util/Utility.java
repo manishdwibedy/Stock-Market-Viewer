@@ -19,7 +19,7 @@ public class Utility {
      *
      * For ex. - 0.430000000000007 to 0.43
      * @param data - the input floating point number in string format
-     * @return - te output floating point number in string format
+     * @return - the output floating point number in string format
      */
     public static String to2DecimalPlaces(String data)
     {
@@ -34,7 +34,7 @@ public class Utility {
             return df.format(number);
         }
         catch(NumberFormatException nfe){
-            return null;
+            return data;
         }
     }
 
