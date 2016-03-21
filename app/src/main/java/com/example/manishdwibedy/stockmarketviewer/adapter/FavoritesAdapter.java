@@ -1,4 +1,4 @@
-package com.example.manishdwibedy.stockmarketviewer;
+package com.example.manishdwibedy.stockmarketviewer.adapter;
 
 /**
  * Created by manishdwibedy on 3/19/16.
@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.example.manishdwibedy.stockmarketviewer.R;
 import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 
