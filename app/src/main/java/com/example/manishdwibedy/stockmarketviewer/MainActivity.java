@@ -222,4 +222,11 @@ public class MainActivity extends AppCompatActivity{
         alertDialog.show();
     }
 
+    public void refreshStocks(View view)
+    {
+        Toast.makeText(this.getApplicationContext(), "Refreshing!",
+                Toast.LENGTH_SHORT).show();
+
+    }
+
 }
