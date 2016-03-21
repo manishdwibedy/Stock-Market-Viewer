@@ -106,12 +106,16 @@ public class SearchActivity extends AppCompatActivity {
     private void setupTabs() {
         TabLayout tabs = (TabLayout) findViewById(R.id.tabs);
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
-        TabsPagerAdapter adapter = new TabsPagerAdapter(getSupportFragmentManager());
+        TabsPagerAdapter adapter = new TabsPagerAdapter(this.stock, getSupportFragmentManager());
 
 
         pager.setAdapter(adapter);
         tabs.setupWithViewPager(pager);
+
+        tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(pager));
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

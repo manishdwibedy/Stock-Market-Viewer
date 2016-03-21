@@ -7,17 +7,21 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
+
 
 public class TabsPagerAdapter extends FragmentPagerAdapter {
 
-    public final String[] tabNames = new String[]{"Current Stock","Historical Chart","News Feed"};
-    public TabsPagerAdapter(FragmentManager fm) {
+    public final String[] tabNames = new String[]{"Current","Historical","News"};
+    private FavoriteStock stock;
+    public TabsPagerAdapter(FavoriteStock stock, FragmentManager fm) {
         super(fm);
+        this.stock = stock;
     }
 
     @Override
     public Fragment getItem(int position) {
-        return PageFragment.newInstance(position + 1);
+        return PageFragment.newInstance(position + 1, stock);
     }
 
     @Override

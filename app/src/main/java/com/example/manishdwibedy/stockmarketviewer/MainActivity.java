@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.manishdwibedy.stockmarketviewer.adapter.FavoritesAdapter;
 import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetFavoriteStockAsync;
 import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
