@@ -157,21 +157,19 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    if (!isStockLongPressed) {
-                        Stock selectedStock = (Stock) listView.getItemAtPosition(i);
+                if (!isStockLongPressed) {
+                    Stock selectedStock = (Stock) listView.getItemAtPosition(i);
 
-                        // Moving to show the selected stock
-                        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
-                        intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
-                        intent.putExtra(Constant.stockData, new Gson().toJson(selectedStock));
+                    // Moving to show the selected stock
+                    Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+                    intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
+                    intent.putExtra(Constant.stockData, new Gson().toJson(selectedStock));
 
-                        // Start the activity
-                        startActivity(intent);
+                    // Start the activity
+                    startActivity(intent);
 
-                        isStockLongPressed = false;
-                    }
-
-
+                    isStockLongPressed = false;
+                }
                 }
             });
 
@@ -204,9 +202,9 @@ public class MainActivity extends AppCompatActivity{
 
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                favoritesAdapter.getData().remove(selectedStock);
-                Utility.removeFromFavorites(MainActivity.this, selectedStock);
-                favoritesAdapter.notifyDataSetChanged();
+            favoritesAdapter.getData().remove(selectedStock);
+            Utility.removeFromFavorites(MainActivity.this, selectedStock);
+            favoritesAdapter.notifyDataSetChanged();
             }
 
         });
