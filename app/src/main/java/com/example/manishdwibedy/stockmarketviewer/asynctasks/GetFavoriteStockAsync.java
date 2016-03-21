@@ -19,7 +19,6 @@ public class GetFavoriteStockAsync extends AsyncTask<ArrayList<String>, Void, Li
     private final ProgressBar progressBar;
 
     private String TAG = "GetFavoriteStockAsync-Async";
-    private Exception exception;
 
     public GetFavoriteStockAsync(ProgressBar progressBar)
     {
@@ -50,6 +49,5 @@ public class GetFavoriteStockAsync extends AsyncTask<ArrayList<String>, Void, Li
     @Override
     protected void onPreExecute() {
         Log.d(TAG, "Starting");
-        //progressBar.setVisibility(View.VISIBLE);
     }
 }
