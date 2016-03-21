@@ -24,6 +24,8 @@ import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -33,6 +35,13 @@ public class PageFragment extends Fragment {
     private static final String TAG = "PageFragment";
 
     private static FavoriteStock stock;
+
+    // Need to define the order of the list items
+    private String[] listOrder = new String[]{"Name", "Symbol", "LastPrice", "Change", "Timestamp", "MarketCap", "Volume", "ChangeYTD", "High", "Low", "Open"};
+
+    // Values that need to be truncated
+    private String[] truncationNeeded = new String[]{"Volume", "MarketCap"};
+
     public PageFragment() {
     }
 
@@ -84,6 +93,14 @@ public class PageFragment extends Fragment {
 
                     final List<StockDetail> list = new ArrayList<StockDetail>();
 
+                    // Defines the order of the list items
+                    List<String> order = new ArrayList<String>();
+                    order = Arrays.asList(listOrder);
+
+                    // Need truncation
+                    List<String> trunctionNeeded = new ArrayList<String>();
+                    trunctionNeeded = Arrays.asList(truncationNeeded);
+
                     Class objClass= stockData.getClass();
                     Method[] methods = objClass.getMethods();
                     for (Method method:methods)
@@ -96,15 +113,53 @@ public class PageFragment extends Fragment {
 
                             if(!property.equalsIgnoreCase("Class"))
                             {
-                                String propertyValue = (String) method.invoke(stockData);
+                                String propertyValue;
+                                if(trunctionNeeded.contains(property))
+                                {
+                                    propertyValue = (String) method.invoke(stockData);
+                                    propertyValue = Utility.truncateNumber(propertyValue);
+                                }
+                                else
+                                {
+                                    propertyValue = (String) method.invoke(stockData);
+                                }
+
                                 stockDetail.setName(property.toUpperCase());
                                 stockDetail.setValue(Utility.to2DecimalPlaces(propertyValue));
-                                list.add(stockDetail);
+                                stockDetail.setOrder(order.indexOf(property));
+                                // Set the Change Percent
+                                if(property.equalsIgnoreCase("Change"))
+                                {
+//                                    String type = property.substring(property.length() - 3);
+//                                    String methodName = "get" + property + "Percent";
+//                                    Method m = objClass.getMethod(methodName, StockData.class);
+
+//                                    stockDetail.setValue(stockDetail.getValue() + "(" + m.invoke(stockData) + ")");
+                                    String value = Utility.to2DecimalPlaces(stockData.getChangePercent());
+                                    stockDetail.setValue(stockDetail.getValue() + "(" + value + ")");
+                                }
+                                // Set the Change Percent YTD
+                                if(property.equalsIgnoreCase("ChangeYTD"))
+                                {
+//                                    String type = property.substring(property.length() - 3);
+//                                    String methodName = "get" + property + "Percent";
+//                                    Method m = objClass.getMethod(methodName, StockData.class);
+//
+//                                    stockDetail.setValue(stockDetail.getValue() + "(" + m.invoke(stockData) + ")");
+                                    String value = Utility.to2DecimalPlaces(stockData.getChangePercentYTD());
+                                    stockDetail.setValue(stockDetail.getValue() + "(" + value + ")");
+                                }
+                                if(stockDetail.getOrder()>=0)
+                                {
+                                    list.add(stockDetail);
+                                }
                             }
 
                         }
                         System.out.println("Public method found: " +  method.toString());
                     }
+
+                    Collections.sort(list);
 
                     // Setting the list view's adapter
                     Thread thread = new Thread(){
@@ -124,7 +179,10 @@ public class PageFragment extends Fragment {
                     };
                     thread.start();
                 }
-
+//                catch(NoSuchMethodException e)
+//                {
+//                    Log.e(TAG, e.getMessage());
+//                }
                 catch(InterruptedException e)
                 {
                     Log.e(TAG, e.getMessage());
@@ -132,10 +190,14 @@ public class PageFragment extends Fragment {
                 catch (ExecutionException e)
                 {
                     Log.e(TAG, e.getMessage());
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
+                }
+                catch (InvocationTargetException e)
+                {
+                    Log.e(TAG, e.getMessage());
+                }
+                catch (IllegalAccessException e)
+                {
+                    Log.e(TAG, e.getMessage());
                 }
             }
         };
