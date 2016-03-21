@@ -1,5 +1,6 @@
 package com.example.manishdwibedy.stockmarketviewer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
@@ -21,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetFavoriteStockAsync;
+import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
@@ -28,6 +30,7 @@ import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 import static com.example.manishdwibedy.stockmarketviewer.R.id.progressBar;
@@ -152,11 +155,11 @@ public class MainActivity extends AppCompatActivity{
             String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
 
             // Retrieving the favorites object
-            Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
+            final Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
 
             listView = (ListView) findViewById(R.id.favoritesListView);
 
-            this.favoritesAdapter = new FavoritesAdapter(this, favorites);
+            final Activity context = this;
 
             final ArrayList<String> stockSymbols = new ArrayList<String>();
             for(Stock stock: favorites.getFavoriteList())
@@ -168,10 +171,11 @@ public class MainActivity extends AppCompatActivity{
                 public void run() {
                     try{
                         ProgressBar spinner = (ProgressBar) findViewById(progressBar);
+                        spinner.setVisibility(ProgressBar.VISIBLE);
 
                         GetFavoriteStockAsync mTask = new GetFavoriteStockAsync(spinner);
-                        String s = mTask.execute(stockSymbols).get();
-                        Log.d(TAG, s);
+                        final List<FavoriteStock> favoriteStocks = mTask.execute(stockSymbols).get();
+
 
                         // Setting the list view's adapter
                         Thread thread = new Thread(){
@@ -182,6 +186,7 @@ public class MainActivity extends AppCompatActivity{
                                     runOnUiThread(new Runnable() {
                                         @Override
                                         public void run() {
+                                            favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
                                             listView.setAdapter(favoritesAdapter);
                                         }
                                     });
