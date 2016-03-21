@@ -11,18 +11,26 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetFavoriteStockAsync;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
+
+import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
+
+import static com.example.manishdwibedy.stockmarketviewer.R.id.progressBar;
 
 
 public class MainActivity extends AppCompatActivity{
@@ -150,7 +158,50 @@ public class MainActivity extends AppCompatActivity{
 
             this.favoritesAdapter = new FavoritesAdapter(this, favorites);
 
-            listView.setAdapter(favoritesAdapter);
+            final ArrayList<String> stockSymbols = new ArrayList<String>();
+            for(Stock stock: favorites.getFavoriteList())
+                stockSymbols.add(stock.getSymbol());
+
+            // Doing the async task on a new thread.
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    try{
+                        ProgressBar spinner = (ProgressBar) findViewById(progressBar);
+
+                        GetFavoriteStockAsync mTask = new GetFavoriteStockAsync(spinner);
+                        String s = mTask.execute(stockSymbols).get();
+                        Log.d(TAG, s);
+
+                        // Setting the list view's adapter
+                        Thread thread = new Thread(){
+                            @Override
+                            public void run() {
+                                synchronized (this) {
+
+                                    runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            listView.setAdapter(favoritesAdapter);
+                                        }
+                                    });
+                                }
+                            };
+                        };
+                        thread.start();
+                    }
+
+                    catch(InterruptedException e)
+                    {
+                        Log.e(TAG, e.getMessage());
+                    }
+                    catch (ExecutionException e)
+                    {
+                        Log.e(TAG, e.getMessage());
+                    }
+                }
+            };
+            new Thread(runnable).start();
 
             // Moving to the SearchActivity when a stock is selected from the favorite list
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
