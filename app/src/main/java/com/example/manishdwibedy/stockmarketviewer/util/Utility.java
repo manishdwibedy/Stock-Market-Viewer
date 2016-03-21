@@ -29,6 +29,7 @@ public class Utility {
             number = Float.parseFloat(data);
 
             DecimalFormat df = new DecimalFormat();
+            df.setMinimumFractionDigits(2);
             df.setMaximumFractionDigits(2);
             return df.format(number);
         }
@@ -62,5 +63,47 @@ public class Utility {
 
         }
         return true;
+    }
+
+    public static String truncateNumber(String input) {
+
+        float floatNumber;
+
+        try{
+            if(input.contains((CharSequence) ","))
+            {
+                input = input.replaceAll(",","");
+            }
+            floatNumber = Float.parseFloat(input);
+        }
+        catch (NumberFormatException nfe)
+        {
+            return null;
+        }
+
+        return truncateNumber(floatNumber);
+    }
+
+    public static String truncateNumber(float floatNumber) {
+        long million = 1000000L;
+        long billion = 1000000000L;
+        long trillion = 1000000000000L;
+
+        long number = Math.round(floatNumber);
+
+        if ((number >= million) && (number < billion)) {
+            float fraction = calculateFraction(number, million);
+            return to2DecimalPlaces(Float.toString(fraction)) + " M";
+        } else if ((number >= billion) && (number < trillion)) {
+            float fraction = calculateFraction(number, billion);
+            return to2DecimalPlaces(Float.toString(fraction)) + " B";
+        }
+        return Long.toString(number);
+    }
+
+    private static float calculateFraction(long number, long divisor) {
+        long truncate = (number * 10L + (divisor / 2L)) / divisor;
+        float fraction = (float) truncate * 0.10F;
+        return fraction;
     }
 }

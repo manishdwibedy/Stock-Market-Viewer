@@ -41,11 +41,12 @@ public class FavoritesAdapter extends ArrayAdapter<FavoriteStock> {
         stockSymbol.setText(stock.getSymbol());
 
         // Getting the stock data
-        String stockPrice = Utility.to2DecimalPlaces(stock.getLastPrice()) ;
+        String stockPrice = "$ " + Utility.to2DecimalPlaces(stock.getLastPrice()) ;
         String marketCap = Utility.to2DecimalPlaces(stock.getMarketCap());
+        String percentChange = Utility.to2DecimalPlaces(stock.getChangePercent());
 
-        stockData.setText(stockPrice);
-        marketData.setText(marketCap);
+        stockData.setText(stockPrice + " (" + percentChange + "% )");
+        marketData.setText("Market : "+Utility.truncateNumber(marketCap));
         return  listViewItem;
     }
 
