@@ -139,7 +139,7 @@ public class PageFragment extends Fragment {
                                     stockDetail.setValue(stockDetail.getValue() + "(" + value + ")");
                                 }
                                 // Set the Change Percent YTD
-                                if(property.equalsIgnoreCase("ChangeYTD"))
+                                else if(property.equalsIgnoreCase("ChangeYTD"))
                                 {
 //                                    String type = property.substring(property.length() - 3);
 //                                    String methodName = "get" + property + "Percent";
@@ -148,6 +148,14 @@ public class PageFragment extends Fragment {
 //                                    stockDetail.setValue(stockDetail.getValue() + "(" + m.invoke(stockData) + ")");
                                     String value = Utility.to2DecimalPlaces(stockData.getChangePercentYTD());
                                     stockDetail.setValue(stockDetail.getValue() + "(" + value + ")");
+                                }
+                                else if(property.equalsIgnoreCase("Timestamp"))
+                                {
+                                    String timestamp = Utility.parseDateTime(propertyValue);
+                                    if(timestamp != null)
+                                    {
+                                        stockDetail.setValue(timestamp);
+                                    }
                                 }
                                 if(stockDetail.getOrder()>=0)
                                 {

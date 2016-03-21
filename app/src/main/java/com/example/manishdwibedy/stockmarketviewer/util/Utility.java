@@ -7,7 +7,13 @@ import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.google.gson.Gson;
 
+import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Created by manishdwibedy on 3/20/16.
@@ -105,5 +111,26 @@ public class Utility {
         long truncate = (number * 10L + (divisor / 2L)) / divisor;
         float fraction = (float) truncate * 0.10F;
         return fraction;
+    }
+
+    /**
+     * Would parse the date into the needed format.
+     * Else, would return null incase of ParseException
+     * @param input - the input date in String format
+     * @return the date in the required format
+     */
+    public static String parseDateTime(String input)
+    {
+        input = input.replaceAll("UTC", "GMT");
+
+        DateFormat inputFormat = new SimpleDateFormat("EEE MMM dd kk:mm:ss Z yyyy", Locale.ENGLISH);
+        Format outputFormat = new SimpleDateFormat("dd MMMM yyyy, kk:mm:ss", Locale.ENGLISH);
+        try {
+            Date inputDate = inputFormat.parse(input);
+            return outputFormat.format(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }
