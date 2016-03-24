@@ -20,11 +20,16 @@ import android.widget.TextView;
 
 import com.example.manishdwibedy.stockmarketviewer.R;
 import com.example.manishdwibedy.stockmarketviewer.adapter.StockDetailsAdapter;
+import com.example.manishdwibedy.stockmarketviewer.adapter.StockNewsFeedAdapter;
 import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetStockDataAsync;
+import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetStockNewsAsync;
 import com.example.manishdwibedy.stockmarketviewer.asynctasks.ImageLoadTask;
 import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.StockData;
 import com.example.manishdwibedy.stockmarketviewer.model.StockDetail;
+import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.StockNewsAdapterDetails;
+import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.gson.Result;
+import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.gson.StockNews;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 
 import java.lang.reflect.InvocationTargetException;
@@ -68,6 +73,7 @@ public class PageFragment extends Fragment {
         int page = getArguments().getInt(ARG_PAGE_NUMBER, -1);
         View view = null;
         TextView textView;
+
         switch (page){
             case 1:
                 view = inflater.inflate(R.layout.fragment_current_stock, container, false);
@@ -80,12 +86,72 @@ public class PageFragment extends Fragment {
                 break;
             case 3:
                 view = inflater.inflate(R.layout.fragment_news_feed, container, false);
-                textView = (TextView) view.findViewById(R.id.news_feed_label);
-                textView.setText("News Feed");
+                getStockNewsFeed(PageFragment.stock.getSymbol(), view);
                 break;
-
         }
         return view;
+    }
+
+    private void getStockNewsFeed(final String symbol, final View view) {
+        final ListView listView = (ListView) view.findViewById(R.id.stockNewsFeed);
+
+        // Doing the async task on a new thread.
+        // Getting the stock data and loading the listview
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    //final ProgressBar spinner = (ProgressBar) view.findViewById(newsProgressBar);
+                    //spinner.setVisibility(ProgressBar.VISIBLE);
+
+                    GetStockNewsAsync mTask = new GetStockNewsAsync(null);
+                    final StockNews stockNews = mTask.execute(symbol).get();
+
+                    final List<StockNewsAdapterDetails> list = new ArrayList<StockNewsAdapterDetails>();
+
+                    if(stockNews.getResponseStatus().equals(200))
+                    {
+                        for (Result news : stockNews.getResponseData().getResults()){
+                            StockNewsAdapterDetails details = new StockNewsAdapterDetails();
+                            details.setName("NAME");
+                            details.setValue("VALUE");
+                            list.add(details);
+                        }
+                    }
+
+
+                    // Setting the list view's adapter
+                    // Need to do it on UI Thread
+                    Thread thread = new Thread() {
+                        @Override
+                        public void run() {
+                            synchronized (this) {
+                                getActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        StockNewsFeedAdapter favoritesAdapter = new StockNewsFeedAdapter(getActivity(), list);
+                                        listView.setAdapter(favoritesAdapter);
+
+                                        //Utility.getListViewSize(listView);
+
+                                        //spinner.setVisibility(ProgressBar.GONE);
+                                    }
+                                });
+                            }
+                        }
+
+                        ;
+                    };
+                    thread.start();
+                }
+                catch (InterruptedException e) {
+                    Log.e(TAG, e.getMessage());
+                } catch (ExecutionException e) {
+                    Log.e(TAG, e.getMessage());
+                }
+            }
+        };
+        new Thread(runnable).start();
     }
 
     private void getStockData(final String symbol, final View view) {
