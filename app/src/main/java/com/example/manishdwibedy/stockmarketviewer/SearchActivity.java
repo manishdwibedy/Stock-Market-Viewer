@@ -122,11 +122,22 @@ public class SearchActivity extends AppCompatActivity {
                 int numTab = tab.getPosition();
 
                 Log.d(TAG, "numTab is " + numTab);
+
+                switch(numTab){
+                    case 0:
+                        break;
+                    case 1:
+                        Log.d(TAG, "Historical charts tab selected");
+                        break;
+                    case 2:
+                        Log.d(TAG, "News feed tab selected");
+                        break;
+                    default:
+                        Log.e(TAG, "Error numTab is " + numTab );
+                }
             }
         });
     }
-
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
