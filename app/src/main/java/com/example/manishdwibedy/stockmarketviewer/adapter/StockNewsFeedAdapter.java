@@ -33,17 +33,17 @@ public class StockNewsFeedAdapter extends ArrayAdapter<StockNewsAdapterDetails> 
 
         TextView newsTitle = (TextView) listViewItem.findViewById(R.id.stockNewsTitle);
         TextView newsContent = (TextView) listViewItem.findViewById(R.id.stockNewsContent);
-        TextView newsPublisher = (TextView) listViewItem.findViewById(R.id.stockNewsTitle);
+        TextView newsPublisher = (TextView) listViewItem.findViewById(R.id.stockNewsPublisher);
         TextView newsDate = (TextView) listViewItem.findViewById(R.id.stockNewsDate);
 
 
         StockNewsAdapterDetails detail = data.get(position);
-        newsTitle.setText(detail.getName());
-        newsContent.setText(detail.getValue());
-        newsPublisher.setText("PUB");
-        newsDate.setText("PUB");
+        newsTitle.setText(detail.getTitle());
+        newsContent.setText(detail.getContent());
+        newsPublisher.setText(detail.getPublisher());
+        newsDate.setText(detail.getPublishedDate());
 
-        return  listViewItem;
+        return listViewItem;
     }
 
     private void getStockInfo(String symbol)
