@@ -50,10 +50,12 @@ public class PageFragment extends Fragment {
     private static FavoriteStock stock;
 
     // Need to define the order of the list items
-    private String[] listOrder = new String[]{"Name", "Symbol", "LastPrice", "Change", "Timestamp", "MarketCap", "Volume", "ChangeYTD", "High", "Low", "Open"};
+    private String[] stockDetailOrder = new String[]{"Name", "Symbol", "LastPrice", "Change", "Timestamp", "MarketCap", "Volume", "ChangeYTD", "High", "Low", "Open"};
 
     // Values that need to be truncated
     private String[] truncationNeeded = new String[]{"Volume", "MarketCap"};
+
+    private String[] stockNewsValue = new String[]{"titlenoformatting", "publisher", "publisheddate", "content"};
 
     public PageFragment() {
     }
@@ -109,13 +111,49 @@ public class PageFragment extends Fragment {
 
                     final List<StockNewsAdapterDetails> list = new ArrayList<StockNewsAdapterDetails>();
 
+                    // Consider only those fields that would be displayed
+                    List<String> stockNewsValues = Arrays.asList(stockNewsValue);
+
                     if(stockNews.getResponseStatus().equals(200))
                     {
-                        for (Result news : stockNews.getResponseData().getResults()){
-                            StockNewsAdapterDetails details = new StockNewsAdapterDetails();
-                            details.setName("NAME");
-                            details.setValue("VALUE");
-                            list.add(details);
+                        Class objClass = stockNews.getResponseData().getResults().get(0).getClass();
+                        Method[] methods = objClass.getMethods();
+
+
+                        for(Result result : stockNews.getResponseData().getResults())
+                        {
+                            StockNewsAdapterDetails stockDetail = new StockNewsAdapterDetails();
+                            for (Method method : methods) {
+                                // Only consider the get methods
+                                if (method.getName().startsWith("get")) {
+
+                                    String property = method.getName().substring(3);
+
+                                    if (!property.equalsIgnoreCase("Class") && stockNewsValues.contains(property.toLowerCase())) {
+                                        String propertyValue;
+                                        propertyValue = (String) method.invoke(result);
+
+                                        switch (property.toLowerCase())
+                                        {
+                                            case "titlenoformatting":
+                                                stockDetail.setTitle(propertyValue);
+                                                break;
+                                            case "content":
+                                                stockDetail.setContent(propertyValue);
+                                                break;
+                                            case "publisher":
+                                                stockDetail.setPublisher("Publisher : "+propertyValue);
+                                                break;
+                                            case "publisheddate":
+                                                stockDetail.setPublishedDate("Date : "+propertyValue);
+
+                                        }
+
+                                    }
+                                }
+                                Log.d(TAG, "Public method found: " + method.toString());
+                            }
+                            list.add(stockDetail);
                         }
                     }
 
@@ -148,6 +186,10 @@ public class PageFragment extends Fragment {
                     Log.e(TAG, e.getMessage());
                 } catch (ExecutionException e) {
                     Log.e(TAG, e.getMessage());
+                } catch (InvocationTargetException e) {
+                    Log.e(TAG, e.getMessage());
+                } catch (IllegalAccessException e) {
+                    Log.e(TAG, e.getMessage());
                 }
             }
         };
@@ -173,7 +215,7 @@ public class PageFragment extends Fragment {
                     final List<StockDetail> list = new ArrayList<StockDetail>();
 
                     // Defines the order of the list items
-                    List<String> order = Arrays.asList(listOrder);
+                    List<String> order = Arrays.asList(stockDetailOrder);
 
                     // Need truncation
                     List<String> trunctionNeeded = Arrays.asList(truncationNeeded);
