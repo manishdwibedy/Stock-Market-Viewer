@@ -108,11 +108,22 @@ public class SearchActivity extends AppCompatActivity {
         ViewPager pager = (ViewPager) findViewById(R.id.pager);
         TabsPagerAdapter adapter = new TabsPagerAdapter(this.stock, getSupportFragmentManager());
 
-
         pager.setAdapter(adapter);
+
         tabs.setupWithViewPager(pager);
 
-        tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(pager));
+        // Adding the tab change listener!
+        tabs.setOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(pager) {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                super.onTabSelected(tab);
+
+                // Get the tab position
+                int numTab = tab.getPosition();
+
+                Log.d(TAG, "numTab is " + numTab);
+            }
+        });
     }
 
 
