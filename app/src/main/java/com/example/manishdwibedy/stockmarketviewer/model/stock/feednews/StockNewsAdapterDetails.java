@@ -6,30 +6,26 @@ import com.example.manishdwibedy.stockmarketviewer.model.StockDetail;
  * Created by manishdwibedy on 3/24/16.
  */
 public class StockNewsAdapterDetails implements Comparable {
-    private String name;
-    private String value;
+    private String title;
+    private String content;
+    private String publisher;
+    private String publishedDate;
     private int order;
 
-    public String getValue() {
-        return value;
+    public String getContent() {
+        return content;
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    public void setContent(String value) {
+        this.content = value;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        /* For Ascending order*/
-        return this.getOrder()-((StockDetail)o).getOrder();
+    public String getTitle() {
+        return title;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public int getOrder() {
@@ -38,6 +34,28 @@ public class StockNewsAdapterDetails implements Comparable {
 
     public void setOrder(int order) {
         this.order = order;
+    }
+
+    public String getPublisher() {
+        return publisher;
+    }
+
+    public void setPublisher(String publisher) {
+        this.publisher = publisher;
+    }
+
+    public String getPublishedDate() {
+        return publishedDate;
+    }
+
+    public void setPublishedDate(String publishedDate) {
+        this.publishedDate = publishedDate;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        /* For Ascending order*/
+        return this.getOrder()-((StockDetail)o).getOrder();
     }
 
 }
