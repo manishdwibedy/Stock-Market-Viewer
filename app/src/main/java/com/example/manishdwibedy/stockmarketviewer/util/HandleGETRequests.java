@@ -3,12 +3,16 @@ package com.example.manishdwibedy.stockmarketviewer.util;
 /**
  * Created by manishdwibedy on 3/15/16.
  */
+
+import android.util.Log;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class HandleGETRequests {
+    private static final String TAG = "HandleGETRequests";
 
     private final static String USER_AGENT = "Mozilla/5.0";
 
@@ -34,8 +38,8 @@ public class HandleGETRequests {
         con.setRequestProperty("User-Agent", USER_AGENT);
 
         int responseCode = con.getResponseCode();
-        System.out.println("\nSending 'GET' request to URL : " + url);
-        System.out.println("Response Code : " + responseCode);
+        Log.d(TAG, "Sending 'GET' request to URL : " + url);
+        Log.d(TAG, "Response Code : " + responseCode);
 
         BufferedReader in = new BufferedReader(
                 new InputStreamReader(con.getInputStream()));
@@ -47,8 +51,7 @@ public class HandleGETRequests {
         }
         in.close();
 
-        //print result
-        System.out.println(response.toString());
+        Log.d(TAG, "Response : " + response.toString());
         return response.toString();
     }
 }
