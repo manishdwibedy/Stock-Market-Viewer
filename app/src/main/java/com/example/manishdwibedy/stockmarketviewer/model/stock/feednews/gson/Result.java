@@ -1,11 +1,23 @@
 
-package com.example.manishdwibedy.stockmarketviewer.model.stock.feednews;
+package com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.gson;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RelatedStory {
+import java.util.ArrayList;
+import java.util.List;
 
+public class Result {
+
+    @SerializedName("GsearchResultClass")
+    @Expose
+    private String GsearchResultClass;
+    @SerializedName("clusterUrl")
+    @Expose
+    private String clusterUrl;
+    @SerializedName("content")
+    @Expose
+    private String content;
     @SerializedName("unescapedUrl")
     @Expose
     private String unescapedUrl;
@@ -33,6 +45,66 @@ public class RelatedStory {
     @SerializedName("language")
     @Expose
     private String language;
+    @SerializedName("image")
+    @Expose
+    private Image image;
+    @SerializedName("relatedStories")
+    @Expose
+    private List<RelatedStory> relatedStories = new ArrayList<RelatedStory>();
+
+    /**
+     * 
+     * @return
+     *     The GsearchResultClass
+     */
+    public String getGsearchResultClass() {
+        return GsearchResultClass;
+    }
+
+    /**
+     * 
+     * @param GsearchResultClass
+     *     The GsearchResultClass
+     */
+    public void setGsearchResultClass(String GsearchResultClass) {
+        this.GsearchResultClass = GsearchResultClass;
+    }
+
+    /**
+     * 
+     * @return
+     *     The clusterUrl
+     */
+    public String getClusterUrl() {
+        return clusterUrl;
+    }
+
+    /**
+     * 
+     * @param clusterUrl
+     *     The clusterUrl
+     */
+    public void setClusterUrl(String clusterUrl) {
+        this.clusterUrl = clusterUrl;
+    }
+
+    /**
+     * 
+     * @return
+     *     The content
+     */
+    public String getContent() {
+        return content;
+    }
+
+    /**
+     * 
+     * @param content
+     *     The content
+     */
+    public void setContent(String content) {
+        this.content = content;
+    }
 
     /**
      * 
@@ -194,6 +266,42 @@ public class RelatedStory {
      */
     public void setLanguage(String language) {
         this.language = language;
+    }
+
+    /**
+     * 
+     * @return
+     *     The image
+     */
+    public Image getImage() {
+        return image;
+    }
+
+    /**
+     * 
+     * @param image
+     *     The image
+     */
+    public void setImage(Image image) {
+        this.image = image;
+    }
+
+    /**
+     * 
+     * @return
+     *     The relatedStories
+     */
+    public List<RelatedStory> getRelatedStories() {
+        return relatedStories;
+    }
+
+    /**
+     * 
+     * @param relatedStories
+     *     The relatedStories
+     */
+    public void setRelatedStories(List<RelatedStory> relatedStories) {
+        this.relatedStories = relatedStories;
     }
 
 }

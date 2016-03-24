@@ -1,5 +1,5 @@
 
-package com.example.manishdwibedy.stockmarketviewer.model.stock.feednews;
+package com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.gson;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
