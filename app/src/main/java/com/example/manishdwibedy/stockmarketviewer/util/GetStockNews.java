@@ -1,6 +1,6 @@
 package com.example.manishdwibedy.stockmarketviewer.util;
 
-import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.StockNews;
+import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.gson.StockNews;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -8,7 +8,7 @@ import com.google.gson.GsonBuilder;
  * Created by manishdwibedy on 3/20/16.
  */
 public class GetStockNews {
-    public static StockNews getStockData(String symbol){
+    public static StockNews getStockNewsFeed(String symbol){
 
         StockNews stockData = null;
         Gson gson = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
@@ -32,7 +32,7 @@ public class GetStockNews {
 
         while(true)
         {
-            StockNews data = getStockData("AAPL");
+            StockNews data = getStockNewsFeed("AAPL");
             if(data.getResponseData() != null)
             {
                 int x =0;
