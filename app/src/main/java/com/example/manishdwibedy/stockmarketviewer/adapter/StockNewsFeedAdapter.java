@@ -12,6 +12,8 @@ import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.StockNew
 
 import java.util.List;
 
+import static org.apache.commons.lang3.StringEscapeUtils.unescapeHtml4;
+
 /**
  * Created by manishdwibedy on 3/21/16.
  */
@@ -39,7 +41,7 @@ public class StockNewsFeedAdapter extends ArrayAdapter<StockNewsAdapterDetails> 
 
         StockNewsAdapterDetails detail = data.get(position);
         newsTitle.setText(detail.getTitle());
-        newsContent.setText(detail.getContent());
+        newsContent.setText(unescapeHtml4(detail.getContent()));
         newsPublisher.setText(detail.getPublisher());
         newsDate.setText(detail.getPublishedDate());
 
