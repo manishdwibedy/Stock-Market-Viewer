@@ -1,10 +1,146 @@
-<html>
-<head>
-    <title>Hey!!</title>
-</head>
-<body>
-<h1>TITLE</h1>
+<html><head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="googlebot" content="noindex, nofollow">
 
-Hello world
-</body>
-</html>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.js"></script>
+
+    <script type="text/javascript">//<![CDATA[
+
+$(function () {
+
+    var o = encodeURI("https://stock-app-csci.appspot.com/api.php?operation=charts&symbol=" + "FB" + "&duration=" + "1e3" + "&period=" + "Day");
+    $.ajax({
+        url: o,
+        method: "GET",
+        crossDomain: !0,
+        success: function(t, e, a) {
+            buildGraph(JSON.parse(t))
+        },
+        error: function(t, e, a) {
+            alert(a)
+        }
+    })
+
+});
+
+function buildGraph(t) {
+    var e = getOHLC(t);
+    getVolume(t), new Highcharts.StockChart({
+        chart: {
+            renderTo: "container",
+            reflow: !0
+        },
+        title: {
+            text: t.Elements[0].Symbol + " Stock Value"
+        },
+        exporting: {
+            enabled: !1
+        },
+        rangeSelector: {
+            selected: 0,
+            inputEnabled: !1,
+            buttons: [{
+                type: "week",
+                count: 1,
+                text: "1w"
+            }, {
+                type: "month",
+                count: 1,
+                text: "1m"
+            }, {
+                type: "month",
+                count: 3,
+                text: "3m"
+            }, {
+                type: "month",
+                count: 6,
+                text: "6m"
+            }, {
+                type: "ytd",
+                text: "YTD"
+            }, {
+                type: "year",
+                count: 1,
+                text: "1y"
+            }, {
+                type: "all",
+                text: "All"
+            }]
+        },
+        xAxis: {
+            type: "datetime"
+        },
+        yAxis: {
+            title: {
+                text: "Stock Value"
+            }
+        },
+        tooltip: {
+            valuePrefix: "$"
+        },
+        series: [{
+            name: t.Elements[0].Symbol,
+            data: e,
+            type: "area",
+            gapSize: 5,
+            tooltip: {
+                valueDecimals: 2
+            },
+            fillColor: {
+                linearGradient: {
+                    x1: 0,
+                    y1: 0,
+                    x2: 0,
+                    y2: 1
+                },
+                stops: [
+                    [0, Highcharts.getOptions().colors[0]],
+                    [1, Highcharts.Color(Highcharts.getOptions().colors[0]).setOpacity(0).get("rgba")]
+                ]
+            }
+        }]
+    })
+}
+
+function getOHLC(t) {
+    for (var e = t.Dates, a = t.Elements[0], o = [], r = 0, s = e.length; s > r; r++) {
+        var l = getDate(e[r]),
+            n = [l, a.DataSeries.open.values[r], a.DataSeries.high.values[r], a.DataSeries.low.values[r], a.DataSeries.close.values[r]];
+        o.push(n)
+    }
+    return o
+}
+
+function getDate(t) {
+    var e = new Date(t);
+    return Date.UTC(e.getFullYear(), e.getMonth(), e.getDate())
+}
+
+function getVolume(t) {
+    for (var e = t.Dates, a = t.Elements[1], o = [], r = 0, s = e.length; s > r; r++) {
+        var l = getDate(e[r]),
+            n = [l, a.DataSeries.volume.values[r]];
+        o.push(n)
+    }
+    return o
+}
+
+
+//]]>
+
+</script>
+
+
+</head>
+
+<body>
+<div id="container" style="height: 400px; min-width: 310px"></div>
+
+
+
+
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+
+</body></html>
