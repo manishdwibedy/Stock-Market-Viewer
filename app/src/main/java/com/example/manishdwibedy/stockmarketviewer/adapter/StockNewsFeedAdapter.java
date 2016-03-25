@@ -1,6 +1,8 @@
 package com.example.manishdwibedy.stockmarketviewer.adapter;
 
 import android.app.Activity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,13 +57,9 @@ public class StockNewsFeedAdapter extends ArrayAdapter<StockNewsAdapterDetails> 
         StockNewsAdapterDetails detail = data.get(position);
 
         // Set the news title
-        newsTitle.setText(detail.getTitle());
-
-        // Set the news link
-        String newsLink = "http://www.google.com";
-
-        // Adding the link to the news title
-        Linkify.addLinks(newsTitle, this.pattern, newsLink, this.transformFilter, null);
+        newsTitle.setMovementMethod(LinkMovementMethod.getInstance());
+        String text = "<a href=\"http://www.stackoverflow.com\">" + detail.getTitle() + "</a>";
+        newsTitle.setText(Html.fromHtml(text));
 
         // Set the news content
         String escapedNewsContent = unescapeHtml4(detail.getContent());
