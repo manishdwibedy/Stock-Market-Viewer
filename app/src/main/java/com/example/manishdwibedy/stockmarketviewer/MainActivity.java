@@ -295,10 +295,63 @@ public class MainActivity extends AppCompatActivity{
         if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
                 .equals(Constant.favoritesEmpty)) {
 
-            // NOT WORKING
-            //setFavoriteListView(preferences);
+            refreshFavoriteListView(preferences);
 
         }
+
+    }
+
+    private void refreshFavoriteListView(SharedPreferences preferences)
+    {
+        // Retrieving the favorites JSON representation
+        String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
+
+        // Retrieving the favorites object
+        final Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
+
+        listView = (ListView) findViewById(R.id.favoritesListView);
+
+        final Activity context = this;
+
+        final ArrayList<String> stockSymbols = new ArrayList<String>();
+        for(FavoriteStock stock: favorites.getFavoriteList())
+            stockSymbols.add(stock.getSymbol());
+
+                // Setting the list view's adapter
+                Thread thread = new Thread(){
+                    @Override
+                    public void run() {
+                    synchronized (this) {
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                            try{
+                                ProgressBar spinner = (ProgressBar) findViewById(progressBar);
+                                spinner.setVisibility(ProgressBar.VISIBLE);
+
+                                GetFavoriteStockAsync mTask = new GetFavoriteStockAsync(spinner);
+                                final List<FavoriteStock> favoriteStocks = mTask.execute(stockSymbols).get();
+
+                                favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
+                                listView.setAdapter(favoritesAdapter);
+                            }
+                            catch(InterruptedException e)
+                            {
+                                Log.e(TAG, e.getMessage());
+                            }
+                            catch (ExecutionException e)
+                            {
+                                Log.e(TAG, e.getMessage());
+                            }
+
+                            }
+                        });
+                    }
+                    };
+                };
+                thread.start();
 
     }
 
