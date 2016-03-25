@@ -58,13 +58,16 @@ public class StockNewsFeedAdapter extends ArrayAdapter<StockNewsAdapterDetails> 
         newsTitle.setText(detail.getTitle());
 
         // Set the news link
-        String newsLink = "";
+        String newsLink = "http://www.google.com";
 
         // Adding the link to the news title
         Linkify.addLinks(newsTitle, this.pattern, newsLink, this.transformFilter, null);
 
         // Set the news content
-        newsContent.setText(unescapeHtml4(detail.getContent()));
+        String escapedNewsContent = unescapeHtml4(detail.getContent());
+        String HTMLtagsremoved = escapedNewsContent.replaceAll("\\<.*?>","");
+
+        newsContent.setText(HTMLtagsremoved);
 
         // Set the new's publisher
         newsPublisher.setText(detail.getPublisher());
