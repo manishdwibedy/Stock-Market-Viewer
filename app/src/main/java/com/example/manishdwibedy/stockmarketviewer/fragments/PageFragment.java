@@ -55,7 +55,7 @@ public class PageFragment extends Fragment {
     // Values that need to be truncated
     private String[] truncationNeeded = new String[]{"Volume", "MarketCap"};
 
-    private String[] stockNewsValue = new String[]{"titlenoformatting", "publisher", "publisheddate", "content"};
+    private String[] stockNewsValue = new String[]{"titlenoformatting", "publisher", "publisheddate", "content" ,"unescapedurl"};
 
     public PageFragment() {
     }
@@ -146,7 +146,10 @@ public class PageFragment extends Fragment {
                                                 break;
                                             case "publisheddate":
                                                 stockDetail.setPublishedDate("Date : "+propertyValue);
-
+                                                break;
+                                            case "unescapedurl":
+                                                stockDetail.setURL(propertyValue);
+                                                break;
                                         }
 
                                     }

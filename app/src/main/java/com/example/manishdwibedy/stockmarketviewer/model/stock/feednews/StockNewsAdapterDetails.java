@@ -10,6 +10,7 @@ public class StockNewsAdapterDetails implements Comparable {
     private String content;
     private String publisher;
     private String publishedDate;
+    private String URL;
     private int order;
 
     public String getContent() {
@@ -50,6 +51,14 @@ public class StockNewsAdapterDetails implements Comparable {
 
     public void setPublishedDate(String publishedDate) {
         this.publishedDate = publishedDate;
+    }
+
+    public String getURL() {
+        return URL;
+    }
+
+    public void setURL(String URL) {
+        this.URL = URL;
     }
 
     @Override
