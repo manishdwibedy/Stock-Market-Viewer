@@ -15,6 +15,11 @@
         android:gravity="center"
         android:layout_centerVertical="true" />
 
+    <ProgressBar
+        android:id="@+id/chartProgressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content" />
     <WebView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/historicalCharts"

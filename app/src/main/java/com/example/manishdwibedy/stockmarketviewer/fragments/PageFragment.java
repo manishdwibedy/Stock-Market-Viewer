@@ -19,6 +19,7 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.manishdwibedy.stockmarketviewer.ChartWebViewClient;
 import com.example.manishdwibedy.stockmarketviewer.R;
 import com.example.manishdwibedy.stockmarketviewer.adapter.StockDetailsAdapter;
 import com.example.manishdwibedy.stockmarketviewer.adapter.StockNewsFeedAdapter;
@@ -49,6 +50,9 @@ public class PageFragment extends Fragment {
     private static final String TAG = "PageFragment";
 
     private static FavoriteStock stock;
+
+    //
+    private WebView webView;
 
     // Need to define the order of the list items
     private String[] stockDetailOrder = new String[]{"Name", "Symbol", "LastPrice", "Change", "Timestamp", "MarketCap", "Volume", "ChangeYTD", "High", "Low", "Open"};
@@ -86,9 +90,14 @@ public class PageFragment extends Fragment {
                 view = inflater.inflate(R.layout.fragment_historical_chart, container, false);
                 textView = (TextView) view.findViewById(R.id.historical_chart_label);
                 textView.setText("Historical Charts");
-                WebView webView = (WebView) view.findViewById(R.id.historicalCharts);
+                webView = (WebView) view.findViewById(R.id.historicalCharts);
                 webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl("file:///android_asset/charts.html");
+                ProgressBar progress = (ProgressBar) view.findViewById(R.id.chartProgressBar);
+//                progress.setMax(100);
+//                progress.setProgress(0);
+
+                webView.setWebViewClient(new ChartWebViewClient(progress));
+                webView.loadUrl("file:///android_asset/charts.html?param=" + stock.getSymbol());
                 break;
             case 3:
                 view = inflater.inflate(R.layout.fragment_news_feed, container, false);
@@ -351,3 +360,4 @@ public class PageFragment extends Fragment {
         new Thread(loadImage).start();
     }
 }
+

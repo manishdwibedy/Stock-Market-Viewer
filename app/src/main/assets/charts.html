@@ -7,9 +7,48 @@
 
     <script type="text/javascript">//<![CDATA[
 
+
+function getURLParameters(paramName)
+  {
+   var sURL = window.document.URL.toString();
+
+   if (sURL.indexOf("?") > 0)
+   {
+    var arrParams = sURL.split("?");
+
+    var arrURLParams = arrParams[1].split("&");
+
+    var arrParamNames = new Array(arrURLParams.length);
+    var arrParamValues = new Array(arrURLParams.length);
+
+    var i = 0;
+    for (i=0;i<arrURLParams.length;i++)
+    {
+     var sParam =  arrURLParams[i].split("=");
+     arrParamNames[i] = sParam[0];
+     if (sParam[1] != "")
+      arrParamValues[i] = unescape(sParam[1]);
+     else
+      arrParamValues[i] = "No Value";
+    }
+
+    for (i=0;i<arrURLParams.length;i++)
+    {
+        if(arrParamNames[i] == paramName){
+      //alert("Param from activity:"+arrParamValues[i]);
+      return arrParamValues[i];
+      }
+    }
+    return "No Parameters Found";
+   }
+
+  }
+
 $(function () {
 
-    var o = encodeURI("https://stock-app-csci.appspot.com/api.php?operation=charts&symbol=" + "FB" + "&duration=" + "1e3" + "&period=" + "Day");
+    var data=  getURLParameters("param");
+    var o = encodeURI("https://stock-app-csci.appspot.com/api.php?operation=charts&symbol=" + data
+                                                       + "&duration=" + "1e3" + "&period=" + "Day");
     $.ajax({
         url: o,
         method: "GET",
@@ -136,9 +175,6 @@ function getVolume(t) {
 
 <body>
 <div id="container" style="height: 400px; min-width: 310px"></div>
-
-
-
 
 <script src="https://code.highcharts.com/stock/highstock.js"></script>
 <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
