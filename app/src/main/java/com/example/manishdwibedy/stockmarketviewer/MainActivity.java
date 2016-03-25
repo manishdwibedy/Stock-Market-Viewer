@@ -288,6 +288,18 @@ public class MainActivity extends AppCompatActivity{
         Toast.makeText(this.getApplicationContext(), "Refreshing!",
                 Toast.LENGTH_SHORT).show();
 
+        SharedPreferences preferences = this.getApplicationContext().
+                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+
+        // The favorites should have been initialized already!
+        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                .equals(Constant.favoritesEmpty)) {
+
+            // NOT WORKING
+            //setFavoriteListView(preferences);
+
+        }
+
     }
 
 }
