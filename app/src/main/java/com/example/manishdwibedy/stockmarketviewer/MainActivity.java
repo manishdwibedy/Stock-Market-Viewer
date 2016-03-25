@@ -143,70 +143,77 @@ public class MainActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    private void setFavoriteListView(SharedPreferences preferences)
+    {
+        // Retrieving the favorites JSON representation
+        String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
+
+        // Retrieving the favorites object
+        final Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
+
+        listView = (ListView) findViewById(R.id.favoritesListView);
+
+        final Activity context = this;
+
+        final ArrayList<String> stockSymbols = new ArrayList<String>();
+        for(FavoriteStock stock: favorites.getFavoriteList())
+            stockSymbols.add(stock.getSymbol());
+
+        // Doing the async task on a new thread.
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+            try{
+                ProgressBar spinner = (ProgressBar) findViewById(progressBar);
+                spinner.setVisibility(ProgressBar.VISIBLE);
+
+                GetFavoriteStockAsync mTask = new GetFavoriteStockAsync(spinner);
+                final List<FavoriteStock> favoriteStocks = mTask.execute(stockSymbols).get();
+
+
+                // Setting the list view's adapter
+                Thread thread = new Thread(){
+                    @Override
+                    public void run() {
+                        synchronized (this) {
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
+                                    listView.setAdapter(favoritesAdapter);
+                                }
+                            });
+                        }
+                    };
+                };
+                thread.start();
+            }
+
+            catch(InterruptedException e)
+            {
+                Log.e(TAG, e.getMessage());
+            }
+            catch (ExecutionException e)
+            {
+                Log.e(TAG, e.getMessage());
+            }
+            }
+        };
+        new Thread(runnable).start();
+    }
+
     // Setting up the favorites list view!
     private void setupFavorites()
     {
         SharedPreferences preferences = this.getApplicationContext().
                 getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+
         // The favorites should have been initialized already!
         if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
                 .equals(Constant.favoritesEmpty)) {
-            // Retrieving the favorites JSON representation
-            String favoritesJSON = preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty);
 
-            // Retrieving the favorites object
-            final Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
-
-            listView = (ListView) findViewById(R.id.favoritesListView);
-
-            final Activity context = this;
-
-            final ArrayList<String> stockSymbols = new ArrayList<String>();
-            for(FavoriteStock stock: favorites.getFavoriteList())
-                stockSymbols.add(stock.getSymbol());
-
-            // Doing the async task on a new thread.
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    try{
-                        ProgressBar spinner = (ProgressBar) findViewById(progressBar);
-                        spinner.setVisibility(ProgressBar.VISIBLE);
-
-                        GetFavoriteStockAsync mTask = new GetFavoriteStockAsync(spinner);
-                        final List<FavoriteStock> favoriteStocks = mTask.execute(stockSymbols).get();
-
-
-                        // Setting the list view's adapter
-                        Thread thread = new Thread(){
-                            @Override
-                            public void run() {
-                                synchronized (this) {
-
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
-                                            listView.setAdapter(favoritesAdapter);
-                                        }
-                                    });
-                                }
-                            };
-                        };
-                        thread.start();
-                    }
-
-                    catch(InterruptedException e)
-                    {
-                        Log.e(TAG, e.getMessage());
-                    }
-                    catch (ExecutionException e)
-                    {
-                        Log.e(TAG, e.getMessage());
-                    }
-                }
-            };
-            new Thread(runnable).start();
+            setFavoriteListView(preferences);
 
             // Moving to the SearchActivity when a stock is selected from the favorite list
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
