@@ -13,6 +13,7 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -85,6 +86,9 @@ public class PageFragment extends Fragment {
                 view = inflater.inflate(R.layout.fragment_historical_chart, container, false);
                 textView = (TextView) view.findViewById(R.id.historical_chart_label);
                 textView.setText("Historical Charts");
+                WebView webView = (WebView) view.findViewById(R.id.historicalCharts);
+                webView.getSettings().setJavaScriptEnabled(true);
+                webView.loadUrl("http://www.highcharts.com/stock/demo/intraday-area");
                 break;
             case 3:
                 view = inflater.inflate(R.layout.fragment_news_feed, container, false);
