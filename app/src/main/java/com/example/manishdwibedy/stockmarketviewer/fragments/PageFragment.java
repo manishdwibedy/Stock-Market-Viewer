@@ -88,7 +88,7 @@ public class PageFragment extends Fragment {
                 textView.setText("Historical Charts");
                 WebView webView = (WebView) view.findViewById(R.id.historicalCharts);
                 webView.getSettings().setJavaScriptEnabled(true);
-                webView.loadUrl("http://www.highcharts.com/stock/demo/intraday-area");
+                webView.loadUrl("file:///android_asset/charts.html");
                 break;
             case 3:
                 view = inflater.inflate(R.layout.fragment_news_feed, container, false);
