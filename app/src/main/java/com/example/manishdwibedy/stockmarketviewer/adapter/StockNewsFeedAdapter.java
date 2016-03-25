@@ -58,7 +58,7 @@ public class StockNewsFeedAdapter extends ArrayAdapter<StockNewsAdapterDetails> 
 
         // Set the news title
         newsTitle.setMovementMethod(LinkMovementMethod.getInstance());
-        String text = "<a href=\"" + detail.getURL() + "\">" + detail.getTitle() + "</a>";
+        String text = "<a href=\"" + detail.getURL() + "\" style=\"text-decoration:none\">" + detail.getTitle() + "</a>";
         newsTitle.setText(Html.fromHtml(text));
 
         // Set the news content
