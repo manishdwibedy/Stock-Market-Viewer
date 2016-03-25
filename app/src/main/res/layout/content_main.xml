@@ -65,6 +65,7 @@
         android:layout_height="fill_parent"
         android:id="@+id/favoritesListView"
         android:divider="@android:color/transparent"
+        android:background="@drawable/favorite_item"
         android:dividerHeight="10.0sp"
         android:layout_below="@+id/favoriteBar" />
 
