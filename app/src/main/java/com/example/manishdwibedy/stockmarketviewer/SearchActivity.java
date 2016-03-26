@@ -10,7 +10,6 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -143,15 +142,6 @@ public class SearchActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_results, menu);
-
-        SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-        searchManager.getSearchablesInGlobalSearch();
 
         if(isFavorite)
         {
