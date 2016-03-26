@@ -1,6 +1,5 @@
 package com.example.manishdwibedy.stockmarketviewer;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -53,12 +52,14 @@ public class SearchActivity extends AppCompatActivity {
         // Getting the intent's action
         final Intent queryIntent = getIntent();
         final String queryAction = queryIntent.getAction();
+        final String selectedStock = queryIntent.getExtras().getString(Constant.favoriteSelectedKey);
+
         if (Intent.ACTION_VIEW.equals(queryAction))
         {
             this.handleIntent(queryIntent);
         }
         // a favorite stock has been selected
-        else if(queryIntent.getExtras().getString(Constant.favoriteSelectedKey).equals(Constant.favoriteSelectedValue))
+        else if(selectedStock != null && selectedStock.equals(Constant.favoriteSelectedValue))
         {
             FavoriteStock stock = new Gson().fromJson(queryIntent.getExtras().getString(Constant.stockData), FavoriteStock.class);
             this.stock = stock;
