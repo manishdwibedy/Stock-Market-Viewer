@@ -116,10 +116,26 @@ public class PageFragment extends Fragment {
             @Override
             public void run() {
             try {
-                //final ProgressBar spinner = (ProgressBar) view.findViewById(newsProgressBar);
-                //spinner.setVisibility(ProgressBar.VISIBLE);
+                final ProgressBar spinner = (ProgressBar) view.findViewById(R.id.newsProgressBar);
 
-                GetStockNewsAsync mTask = new GetStockNewsAsync(null);
+                // Showing the progress bar
+                Thread renderProgressBar = new Thread() {
+                    @Override
+                    public void run() {
+                        synchronized (this) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    spinner.setVisibility(ProgressBar.VISIBLE);
+                                }
+                            });
+                        }
+                    }
+
+                    ;
+                };
+                renderProgressBar.start();
+                GetStockNewsAsync mTask = new GetStockNewsAsync(spinner);
                 final StockNews stockNews = mTask.execute(symbol).get();
 
                 final List<StockNewsAdapterDetails> list = new ArrayList<StockNewsAdapterDetails>();
@@ -155,10 +171,10 @@ public class PageFragment extends Fragment {
                                             stockDetail.setContent(propertyValue);
                                             break;
                                         case "publisher":
-                                            stockDetail.setPublisher("Publisher : "+propertyValue);
+                                            stockDetail.setPublisher(propertyValue);
                                             break;
                                         case "publisheddate":
-                                            stockDetail.setPublishedDate("Date : "+propertyValue);
+                                            stockDetail.setPublishedDate(propertyValue);
                                             break;
                                         case "unescapedurl":
                                             stockDetail.setURL(propertyValue);
@@ -176,7 +192,7 @@ public class PageFragment extends Fragment {
 
                 // Setting the list view's adapter
                 // Need to do it on UI Thread
-                Thread thread = new Thread() {
+                Thread renderNewsFeed = new Thread() {
                     @Override
                     public void run() {
                     synchronized (this) {
@@ -192,7 +208,7 @@ public class PageFragment extends Fragment {
 
                     ;
                 };
-                thread.start();
+                renderNewsFeed.start();
             }
             catch (InterruptedException e) {
                 Log.e(TAG, e.getMessage());

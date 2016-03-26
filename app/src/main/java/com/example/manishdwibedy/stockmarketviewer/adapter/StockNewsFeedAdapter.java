@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.manishdwibedy.stockmarketviewer.R;
 import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.StockNewsAdapterDetails;
+import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 
 import java.util.List;
 import java.util.regex.Pattern;
@@ -68,10 +69,10 @@ public class StockNewsFeedAdapter extends ArrayAdapter<StockNewsAdapterDetails> 
         newsContent.setText(HTMLtagsremoved);
 
         // Set the new's publisher
-        newsPublisher.setText(detail.getPublisher());
+        newsPublisher.setText("Publisher : "+detail.getPublisher());
 
         // Set the new's date
-        newsDate.setText(detail.getPublishedDate());
+        newsDate.setText("Date : "+Utility.parseNewsDateTime(detail.getPublishedDate()));
 
         return listViewItem;
     }

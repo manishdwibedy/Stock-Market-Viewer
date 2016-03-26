@@ -2,6 +2,7 @@ package com.example.manishdwibedy.stockmarketviewer.asynctasks;
 
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.ProgressBar;
 
 import com.example.manishdwibedy.stockmarketviewer.model.stock.feednews.gson.StockNews;
@@ -34,7 +35,7 @@ public class GetStockNewsAsync extends AsyncTask<String, Void, StockNews> {
     @Override
     protected void onPostExecute(StockNews result) {
         Log.d(TAG, "Done");
-        //progressBar.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
     }
 
     @Override
