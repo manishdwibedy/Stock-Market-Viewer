@@ -43,7 +43,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="Today Stock Activity"
+            android:text="Today's Stock Activity"
             android:id="@+id/currentStockActivity"
             android:layout_below="@+id/stockDetails"
             android:layout_marginTop="20dp"
