@@ -380,44 +380,48 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    private final static int INTERVAL = 1000 * 20; // 10 seconds
+    private final static int INTERVAL = 1000 * 10; // 10 seconds
     Handler refreshHandler;
     Runnable refreshStockRunnable;
 
     private void autoRefresh()
     {
-        final Handler handler = new Handler();
-        this.refreshHandler = handler;
-        refreshStockRunnable = new Runnable() {
+        if(refreshHandler == null)
+        {
+            refreshHandler = new Handler();
+        }
 
-            @Override
-            public void run() {
-                try{
-                    Toast.makeText(MainActivity.this, "Refreshing!",
-                            Toast.LENGTH_SHORT).show();
+        if (refreshStockRunnable == null)
+        {
+            refreshStockRunnable = new Runnable() {
 
-                    SharedPreferences preferences = MainActivity.this.
-                            getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+                @Override
+                public void run() {
+                    try{
+                        Toast.makeText(MainActivity.this, "Refreshing!",
+                                Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "Refreshing the stocks");
 
-                    // The favorites should have been initialized already!
-                    if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
-                            .equals(Constant.favoritesEmpty)) {
+                        SharedPreferences preferences = MainActivity.this.
+                                getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
 
-                        refreshFavoriteListView(preferences);
+                        // The favorites should have been initialized already!
+                        if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                                .equals(Constant.favoritesEmpty)) {
 
+                            refreshFavoriteListView(preferences);
+
+                        }
+                        refreshHandler.postDelayed(this, INTERVAL);
                     }
-                    handler.postDelayed(this, INTERVAL);
+                    catch (Exception e) {
+                        // TODO: handle exception
+                    }
                 }
-                catch (Exception e) {
-                    // TODO: handle exception
-                }
-                finally{
-                    //also call the same runnable
-                    handler.postDelayed(this, INTERVAL);
-                }
-            }
-        };
-        handler.postDelayed(refreshStockRunnable, INTERVAL);
+            };
+        }
+
+        refreshHandler.postDelayed(refreshStockRunnable, INTERVAL);
     }
 
     private void cancelAutoRefresh()
