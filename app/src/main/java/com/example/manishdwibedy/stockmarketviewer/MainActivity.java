@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -17,8 +18,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.example.manishdwibedy.stockmarketviewer.adapter.FavoritesAdapter;
@@ -59,6 +62,25 @@ public class MainActivity extends AppCompatActivity{
         ActionBar actionBar = getSupportActionBar();
         actionBar.setLogo(R.drawable.logo);
         actionBar.setDisplayUseLogoEnabled(true);
+
+        Switch autoRefresh = (Switch) findViewById(R.id.autoRefresh);
+
+        autoRefresh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //your actions when the button has changed the status
+                //the boolean isChecked tells you if the button is activated or not
+                if(isChecked)
+                {
+                    autoRefresh();
+                }
+                else
+                {
+                    cancelAutoRefresh();
+                }
+            }
+        });
+
 
         gson = new Gson();
 
@@ -355,4 +377,41 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
+    private final static int INTERVAL = 1000 * 10; // 10 seconds
+    Handler refreshHandler;
+    Runnable refreshStockRunnable;
+
+    private void autoRefresh()
+    {
+        final Handler handler = new Handler();
+        this.refreshHandler = handler;
+        refreshStockRunnable = new Runnable() {
+
+            @Override
+            public void run() {
+                try{
+                    Toast.makeText(MainActivity.this, "Refreshing!",
+                            Toast.LENGTH_SHORT).show();
+
+                    handler.postDelayed(this, INTERVAL);
+                }
+                catch (Exception e) {
+                    // TODO: handle exception
+                }
+                finally{
+                    //also call the same runnable
+                    handler.postDelayed(this, INTERVAL);
+                }
+            }
+        };
+        handler.postDelayed(refreshStockRunnable, INTERVAL);
+    }
+
+    private void cancelAutoRefresh()
+    {
+        Toast.makeText(MainActivity.this, "Cancelled!",
+                Toast.LENGTH_SHORT).show();
+
+        refreshHandler.removeCallbacks(refreshStockRunnable);
+    }
 }
