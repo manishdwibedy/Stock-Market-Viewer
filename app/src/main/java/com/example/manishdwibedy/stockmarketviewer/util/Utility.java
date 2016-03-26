@@ -97,7 +97,7 @@ public class Utility {
         return truncateNumber(floatNumber);
     }
 
-    public static String truncateNumber(float floatNumber) {
+    public static String truncateNumber(double floatNumber) {
         long million = 1000000L;
         long billion = 1000000000L;
         long trillion = 1000000000000L;
