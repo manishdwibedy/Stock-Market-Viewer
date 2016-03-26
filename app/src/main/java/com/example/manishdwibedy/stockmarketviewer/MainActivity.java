@@ -68,8 +68,7 @@ public class MainActivity extends AppCompatActivity{
         autoRefresh.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //your actions when the button has changed the status
-                //the boolean isChecked tells you if the button is activated or not
+                // Need to set in the preference, to restore the switch's state
                 if(isChecked)
                 {
                     autoRefresh();
@@ -342,41 +341,61 @@ public class MainActivity extends AppCompatActivity{
         for(FavoriteStock stock: favorites.getFavoriteList())
             stockSymbols.add(stock.getSymbol());
 
-                // Setting the list view's adapter
+                final ProgressBar spinner = (ProgressBar) findViewById(progressBar);
+                // Creating the progress bar
                 Thread thread = new Thread(){
                     @Override
                     public void run() {
-                    synchronized (this) {
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-
-                            try{
-                                ProgressBar spinner = (ProgressBar) findViewById(progressBar);
-                                spinner.setVisibility(ProgressBar.VISIBLE);
-
-                                GetFavoriteStockAsync mTask = new GetFavoriteStockAsync(spinner);
-                                final List<FavoriteStock> favoriteStocks = mTask.execute(stockSymbols).get();
-
-                                favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
-                                listView.setAdapter(favoritesAdapter);
-                            }
-                            catch(InterruptedException e)
-                            {
-                                Log.e(TAG, e.getMessage());
-                            }
-                            catch (ExecutionException e)
-                            {
-                                Log.e(TAG, e.getMessage());
-                            }
-
-                            }
-                        });
-                    }
+                        synchronized (this) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    spinner.setVisibility(ProgressBar.VISIBLE);
+                                }
+                            });
+                        }
                     };
                 };
                 thread.start();
+
+                // Doing the async task on a new thread.
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                    try{
+                        GetFavoriteStockAsync mTask = new GetFavoriteStockAsync(spinner);
+                        final List<FavoriteStock> favoriteStocks = mTask.execute(stockSymbols).get();
+
+                        // Setting the list view's adapter
+                        Thread thread = new Thread(){
+                            @Override
+                            public void run() {
+                            synchronized (this) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                    favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
+                                    listView.setAdapter(favoritesAdapter);
+                                    }
+                                });
+                            }
+                            };
+                        };
+                        thread.start();
+                    }
+
+                    catch(InterruptedException e)
+                    {
+                        Log.e(TAG, e.getMessage());
+                    }
+                    catch (ExecutionException e)
+                    {
+                        Log.e(TAG, e.getMessage());
+                    }
+                    }
+                };
+                new Thread(runnable).start();
 
     }
 
