@@ -429,6 +429,10 @@ public class MainActivity extends AppCompatActivity{
         Toast.makeText(MainActivity.this, "Cancelled!",
                 Toast.LENGTH_SHORT).show();
 
-        refreshHandler.removeCallbacks(refreshStockRunnable);
+        // If the refresh handler is present, try to cancel
+        if(refreshHandler != null)
+        {
+            refreshHandler.removeCallbacks(refreshStockRunnable);
+        }
     }
 }
