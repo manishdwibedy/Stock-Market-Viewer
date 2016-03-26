@@ -179,4 +179,30 @@ public class Utility {
         float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
         return px;
     }
+
+    /**
+     * This method re-formats the date time stamp of the news article
+     * Converts the date in form dd MMMM yyyy, hh:mm:ss
+     * @param input The date time in String form
+     * @return The datetime in the needed form
+     */
+    public static String parseNewsDateTime(String input)
+    {
+        DateFormat inputFormat = new SimpleDateFormat("EEE, dd MMM yyyy kk:mm:ss Z", Locale.ENGLISH);
+        Format outputFormat = new SimpleDateFormat("dd MMMM yyyy, kk:mm:ss", Locale.ENGLISH);
+        try {
+            Date inputDate = inputFormat.parse(input);
+            return outputFormat.format(inputDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return input;
+    }
+
+    public static void main(String[] args)
+    {
+        String input = "Thu, 24 Mar 2016 11:51:58 -0700";
+
+        System.out.print(parseNewsDateTime(input));
+    }
 }
