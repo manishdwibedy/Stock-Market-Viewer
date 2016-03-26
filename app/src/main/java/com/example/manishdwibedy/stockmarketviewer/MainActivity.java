@@ -250,6 +250,9 @@ public class MainActivity extends AppCompatActivity{
                     intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
                     intent.putExtra(Constant.stockData, new Gson().toJson(selectedStock));
 
+                    // cancel the auto refresh
+                    cancelAutoRefresh();
+
                     // Start the activity
                     startActivity(intent);
 
@@ -377,7 +380,7 @@ public class MainActivity extends AppCompatActivity{
 
     }
 
-    private final static int INTERVAL = 1000 * 10; // 10 seconds
+    private final static int INTERVAL = 1000 * 20; // 10 seconds
     Handler refreshHandler;
     Runnable refreshStockRunnable;
 
@@ -393,6 +396,16 @@ public class MainActivity extends AppCompatActivity{
                     Toast.makeText(MainActivity.this, "Refreshing!",
                             Toast.LENGTH_SHORT).show();
 
+                    SharedPreferences preferences = MainActivity.this.
+                            getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
+
+                    // The favorites should have been initialized already!
+                    if (!preferences.getString(Constant.favouritesKey, Constant.favoritesEmpty)
+                            .equals(Constant.favoritesEmpty)) {
+
+                        refreshFavoriteListView(preferences);
+
+                    }
                     handler.postDelayed(this, INTERVAL);
                 }
                 catch (Exception e) {
