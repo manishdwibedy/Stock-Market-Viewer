@@ -115,98 +115,94 @@ public class PageFragment extends Fragment {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                try {
-                    //final ProgressBar spinner = (ProgressBar) view.findViewById(newsProgressBar);
-                    //spinner.setVisibility(ProgressBar.VISIBLE);
+            try {
+                //final ProgressBar spinner = (ProgressBar) view.findViewById(newsProgressBar);
+                //spinner.setVisibility(ProgressBar.VISIBLE);
 
-                    GetStockNewsAsync mTask = new GetStockNewsAsync(null);
-                    final StockNews stockNews = mTask.execute(symbol).get();
+                GetStockNewsAsync mTask = new GetStockNewsAsync(null);
+                final StockNews stockNews = mTask.execute(symbol).get();
 
-                    final List<StockNewsAdapterDetails> list = new ArrayList<StockNewsAdapterDetails>();
+                final List<StockNewsAdapterDetails> list = new ArrayList<StockNewsAdapterDetails>();
 
-                    // Consider only those fields that would be displayed
-                    List<String> stockNewsValues = Arrays.asList(stockNewsValue);
+                // Consider only those fields that would be displayed
+                List<String> stockNewsValues = Arrays.asList(stockNewsValue);
 
-                    if(stockNews.getResponseStatus().equals(200))
+                if(stockNews.getResponseStatus().equals(200))
+                {
+                    Class objClass = stockNews.getResponseData().getResults().get(0).getClass();
+                    Method[] methods = objClass.getMethods();
+
+
+                    for(Result result : stockNews.getResponseData().getResults())
                     {
-                        Class objClass = stockNews.getResponseData().getResults().get(0).getClass();
-                        Method[] methods = objClass.getMethods();
+                        StockNewsAdapterDetails stockDetail = new StockNewsAdapterDetails();
+                        for (Method method : methods) {
+                            // Only consider the get methods
+                            if (method.getName().startsWith("get")) {
 
+                                String property = method.getName().substring(3);
 
-                        for(Result result : stockNews.getResponseData().getResults())
-                        {
-                            StockNewsAdapterDetails stockDetail = new StockNewsAdapterDetails();
-                            for (Method method : methods) {
-                                // Only consider the get methods
-                                if (method.getName().startsWith("get")) {
+                                if (!property.equalsIgnoreCase("Class") && stockNewsValues.contains(property.toLowerCase())) {
+                                    String propertyValue;
+                                    propertyValue = (String) method.invoke(result);
 
-                                    String property = method.getName().substring(3);
-
-                                    if (!property.equalsIgnoreCase("Class") && stockNewsValues.contains(property.toLowerCase())) {
-                                        String propertyValue;
-                                        propertyValue = (String) method.invoke(result);
-
-                                        switch (property.toLowerCase())
-                                        {
-                                            case "titlenoformatting":
-                                                stockDetail.setTitle(propertyValue);
-                                                break;
-                                            case "content":
-                                                stockDetail.setContent(propertyValue);
-                                                break;
-                                            case "publisher":
-                                                stockDetail.setPublisher("Publisher : "+propertyValue);
-                                                break;
-                                            case "publisheddate":
-                                                stockDetail.setPublishedDate("Date : "+propertyValue);
-                                                break;
-                                            case "unescapedurl":
-                                                stockDetail.setURL(propertyValue);
-                                                break;
-                                        }
-
+                                    switch (property.toLowerCase())
+                                    {
+                                        case "titlenoformatting":
+                                            stockDetail.setTitle(propertyValue);
+                                            break;
+                                        case "content":
+                                            stockDetail.setContent(propertyValue);
+                                            break;
+                                        case "publisher":
+                                            stockDetail.setPublisher("Publisher : "+propertyValue);
+                                            break;
+                                        case "publisheddate":
+                                            stockDetail.setPublishedDate("Date : "+propertyValue);
+                                            break;
+                                        case "unescapedurl":
+                                            stockDetail.setURL(propertyValue);
+                                            break;
                                     }
+
                                 }
-                                Log.d(TAG, "Public method found: " + method.toString());
                             }
-                            list.add(stockDetail);
+                            Log.d(TAG, "Public method found: " + method.toString());
                         }
+                        list.add(stockDetail);
+                    }
+                }
+
+
+                // Setting the list view's adapter
+                // Need to do it on UI Thread
+                Thread thread = new Thread() {
+                    @Override
+                    public void run() {
+                    synchronized (this) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                            StockNewsFeedAdapter favoritesAdapter = new StockNewsFeedAdapter(getActivity(), list);
+                            listView.setAdapter(favoritesAdapter);
+                            }
+                        });
+                    }
                     }
 
-
-                    // Setting the list view's adapter
-                    // Need to do it on UI Thread
-                    Thread thread = new Thread() {
-                        @Override
-                        public void run() {
-                            synchronized (this) {
-                                getActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        StockNewsFeedAdapter favoritesAdapter = new StockNewsFeedAdapter(getActivity(), list);
-                                        listView.setAdapter(favoritesAdapter);
-
-                                        //Utility.getListViewSize(listView);
-
-                                        //spinner.setVisibility(ProgressBar.GONE);
-                                    }
-                                });
-                            }
-                        }
-
-                        ;
-                    };
-                    thread.start();
-                }
-                catch (InterruptedException e) {
-                    Log.e(TAG, e.getMessage());
-                } catch (ExecutionException e) {
-                    Log.e(TAG, e.getMessage());
-                } catch (InvocationTargetException e) {
-                    Log.e(TAG, e.getMessage());
-                } catch (IllegalAccessException e) {
-                    Log.e(TAG, e.getMessage());
-                }
+                    ;
+                };
+                thread.start();
+            }
+            catch (InterruptedException e) {
+                Log.e(TAG, e.getMessage());
+            } catch (ExecutionException e) {
+                Log.e(TAG, e.getMessage());
+            } catch (InvocationTargetException e) {
+                Log.e(TAG, e.getMessage());
+            } catch (IllegalAccessException e) {
+                Log.e(TAG, e.getMessage());
+            }
             }
         };
         new Thread(runnable).start();
