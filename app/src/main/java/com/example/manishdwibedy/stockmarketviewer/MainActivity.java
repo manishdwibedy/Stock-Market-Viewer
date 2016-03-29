@@ -335,8 +335,8 @@ public class MainActivity extends AppCompatActivity{
 
     public void refreshStocks(View view)
     {
-        Toast.makeText(this.getApplicationContext(), "Refreshing!",
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this.getApplicationContext(), "Refreshing!",
+//                Toast.LENGTH_SHORT).show();
 
         SharedPreferences preferences = this.getApplicationContext().
                 getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
