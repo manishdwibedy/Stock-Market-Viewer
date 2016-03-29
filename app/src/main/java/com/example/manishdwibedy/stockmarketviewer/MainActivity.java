@@ -466,8 +466,8 @@ public class MainActivity extends AppCompatActivity{
 
     private void cancelAutoRefresh()
     {
-        Toast.makeText(MainActivity.this, "Cancelled!",
-                Toast.LENGTH_SHORT).show();
+//        Toast.makeText(MainActivity.this, "Cancelled!",
+//                Toast.LENGTH_SHORT).show();
 
         // If the refresh handler is present, try to cancel
         if(refreshHandler != null)

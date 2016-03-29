@@ -64,7 +64,7 @@ public class SearchActivity extends AppCompatActivity {
             FavoriteStock stock = new Gson().fromJson(queryIntent.getExtras().getString(Constant.stockData), FavoriteStock.class);
             this.stock = stock;
 
-            render(false);
+            render(true);
         }
         else
         {
