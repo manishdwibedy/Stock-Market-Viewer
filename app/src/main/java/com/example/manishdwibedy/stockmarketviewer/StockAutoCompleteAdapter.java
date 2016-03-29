@@ -25,14 +25,6 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
 
     public StockAutoCompleteAdapter(Context context) {
         mContext = context;
-
-        // Adding a dummy stock info for testing
-        List<Stock> stocks = new ArrayList<Stock>();
-        Stock stock = new Stock();
-        stock.setName("AAPL");
-        stocks.add(stock);
-
-        this.resultList = stocks;
     }
 
     @Override
@@ -102,7 +94,7 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
         Stock stock = new Stock();
         stock.setName("AAPL");
         stocks.add(stock);
-
+        this.resultList = stocks;
         return stocks;
     }
 }
