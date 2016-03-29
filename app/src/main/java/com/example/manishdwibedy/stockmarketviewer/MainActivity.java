@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity{
 
 
         final DelayAutoCompleteTextView bookTitle = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
-        bookTitle.setThreshold(1);
+        bookTitle.setThreshold(3);
 
         bookTitle.setAdapter(new StockAutoCompleteAdapter(this)); // 'this' is Activity instance
         bookTitle.setLoadingIndicator(
