@@ -50,8 +50,11 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = inflater.inflate(R.layout.auto_complete_dropdown, parent, false);
         }
-        ((TextView) convertView.findViewById(R.id.primaryLine)).setText(getItem(position).getName());
-        ((TextView) convertView.findViewById(R.id.secondaryLine)).setText(getItem(position).getName());
+
+        Stock stock = getItem(position);
+        ((TextView) convertView.findViewById(R.id.primaryLine)).setText(stock.getSymbol());
+        ((TextView) convertView.findViewById(R.id.secondaryLine)).setText(
+                            stock.getName() + " (" + stock.getExchange() + ")");
         return convertView;
     }
 
