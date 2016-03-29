@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity{
     // Represented whether a stock was long presses for options
     private boolean isStockLongPressed = false;
 
+    private Stock selectedStock = null;
     //
     FavoritesAdapter favoritesAdapter;
 
@@ -98,9 +99,9 @@ public class MainActivity extends AppCompatActivity{
         bookTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                Stock book = (Stock) adapterView.getItemAtPosition(position);
-                bookTitle.setText(book.getName());
-
+                Stock stock = (Stock) adapterView.getItemAtPosition(position);
+                bookTitle.setText(stock.getSymbol());
+                selectedStock = stock;
             }
         });
     }
@@ -472,5 +473,20 @@ public class MainActivity extends AppCompatActivity{
         {
             refreshHandler.removeCallbacks(refreshStockRunnable);
         }
+    }
+
+    public void getQuote(View view)
+    {
+        // Moving to show the selected stock
+        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+        intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
+        intent.putExtra(Constant.stockData, new Gson().toJson(this.selectedStock));
+
+        // cancel the auto refresh
+        cancelAutoRefresh();
+
+        // Start the activity
+        startActivity(intent);
+
     }
 }
