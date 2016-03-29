@@ -14,6 +14,11 @@ public class GetStockData {
         String baseURL = "https://stock-app-csci.appspot.com/api.php?operation=getstock&symbol=";
         try {
             String response = HandleGETRequests.sendGet(baseURL + symbol);
+
+            if (response.contains("No symbol matches found"))
+            {
+                return null;
+            }
             Gson gson = new GsonBuilder().create();
             stockData = gson.fromJson(response, StockData.class);
         } catch (Exception e) {

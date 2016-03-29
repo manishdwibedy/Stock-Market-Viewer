@@ -30,7 +30,9 @@ import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetFavoriteStockAs
 import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
+import com.example.manishdwibedy.stockmarketviewer.model.StockData;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
+import com.example.manishdwibedy.stockmarketviewer.util.GetStockData;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
 
@@ -484,16 +486,83 @@ public class MainActivity extends AppCompatActivity{
     public void getQuote(View view)
     {
         // Moving to show the selected stock
-        Intent intent = new Intent(getBaseContext(), SearchActivity.class);
+        final Intent intent = new Intent(getBaseContext(), SearchActivity.class);
         intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
-        intent.putExtra(Constant.stockData, new Gson().toJson(this.selectedStock));
+
+        if(selectedStock == null)
+        {
+            final DelayAutoCompleteTextView stockSelected = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
+            final String symbol = stockSelected.getText().toString();
+            Stock stock = new Stock();
+            stock.setSymbol(symbol);
+            intent.putExtra(Constant.stockData, new Gson().toJson(stock));
+
+            // Doing the async task on a new thread.
+            Runnable runnable = new Runnable() {
+                @Override
+                public void run() {
+                    StockData stockData = GetStockData.getStockData(symbol);
+                    if(stockData == null)
+                    {
+                        Log.d(TAG, "Error");
+
+                        // Setting the list view's adapter
+                        Thread thread = new Thread(){
+                            @Override
+                            public void run() {
+                            synchronized (this) {
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MainActivity.this);
+
+                                    alertDialog.setMessage("Invalid Symbol");
+                                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+
+                                    });
+
+                                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // Cancelled deletion!
+                                        }
+
+                                    });
+
+                                    alertDialog.show();
+                                    }
+                                });
+                            }
+                            };
+                        };
+                        thread.start();
+
+                    }
+                    else
+                    {
+                        intent.putExtra(Constant.stockData, new Gson().toJson(stockData));
+                        startActivity(intent);
+                    }
+
+
+                }
+            };
+            new Thread(runnable).start();
+        }
+        else
+        {
+            intent.putExtra(Constant.stockData, new Gson().toJson(this.selectedStock));
+            startActivity(intent);
+        }
 
         // cancel the auto refresh
         cancelAutoRefresh();
-
-        // Start the activity
-        startActivity(intent);
-
     }
 
     public void clearStock(View view)
