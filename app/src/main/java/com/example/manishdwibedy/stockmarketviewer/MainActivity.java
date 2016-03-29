@@ -18,8 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -30,6 +28,7 @@ import com.example.manishdwibedy.stockmarketviewer.adapter.FavoritesAdapter;
 import com.example.manishdwibedy.stockmarketviewer.asynctasks.GetFavoriteStockAsync;
 import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
+import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
@@ -90,14 +89,30 @@ public class MainActivity extends AppCompatActivity{
 
         setupFavorites();
 
-        //Create Array Adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_singlechoice, languages);
-        //Find TextView control
-        AutoCompleteTextView acTextView = (AutoCompleteTextView) findViewById(R.id.languages);
-        //Set the number of characters the user must type before the drop down list is shown
-        acTextView.setThreshold(1);
-        //Set the adapter
-        acTextView.setAdapter(adapter);
+//        //Create Array Adapter
+//        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_singlechoice, languages);
+//        //Find TextView control
+//        AutoCompleteTextView acTextView = (AutoCompleteTextView) findViewById(R.id.languages);
+//        //Set the number of characters the user must type before the drop down list is shown
+//        acTextView.setThreshold(1);
+//        //Set the adapter
+//        acTextView.setAdapter(adapter);
+
+
+        final DelayAutoCompleteTextView bookTitle = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
+        bookTitle.setThreshold(1);
+
+        bookTitle.setAdapter(new StockAutoCompleteAdapter(this)); // 'this' is Activity instance
+        bookTitle.setLoadingIndicator(
+                (android.widget.ProgressBar) findViewById(R.id.pb_loading_indicator));
+        bookTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Stock book = (Stock) adapterView.getItemAtPosition(position);
+                bookTitle.setText(book.getName());
+
+            }
+        });
     }
 
     @Override
