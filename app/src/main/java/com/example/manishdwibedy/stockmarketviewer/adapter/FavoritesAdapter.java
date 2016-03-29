@@ -5,6 +5,7 @@ package com.example.manishdwibedy.stockmarketviewer.adapter;
  */
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +50,15 @@ public class FavoritesAdapter extends ArrayAdapter<FavoriteStock> {
 
         stockData.setText(stockPrice);
         priceChange.setText(percentChange + "%");
+        if(Utility.isNegative(percentChange))
+        {
+            priceChange.setBackgroundColor(Color.RED);
+        }
+        else
+        {
+            priceChange.setBackgroundColor(Color.GREEN);
+        }
+
         marketData.setText("Market : "+Utility.truncateNumber(marketCap));
 
         return  listViewItem;
