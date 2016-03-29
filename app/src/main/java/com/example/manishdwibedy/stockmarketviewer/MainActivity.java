@@ -18,6 +18,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -52,6 +54,8 @@ public class MainActivity extends AppCompatActivity{
     //
     FavoritesAdapter favoritesAdapter;
 
+    String[] languages = { "C","C++","Java","C#","PHP","JavaScript","jQuery","AJAX","JSON" };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,6 +89,15 @@ public class MainActivity extends AppCompatActivity{
         gson = new Gson();
 
         setupFavorites();
+
+        //Create Array Adapter
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,android.R.layout.select_dialog_singlechoice, languages);
+        //Find TextView control
+        AutoCompleteTextView acTextView = (AutoCompleteTextView) findViewById(R.id.languages);
+        //Set the number of characters the user must type before the drop down list is shown
+        acTextView.setThreshold(1);
+        //Set the adapter
+        acTextView.setAdapter(adapter);
     }
 
     @Override
