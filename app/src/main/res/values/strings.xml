@@ -7,7 +7,7 @@
     <string name="menu_search">Search</string>
     <string name="search_result">Results</string>
 
-    <string name="stock_label">Enter Stock Name or Symbol</string>
+    <string name="stock_label">Stock Name/Symbol</string>
     <string name="favorite_label">Favorites</string>
     <string name="stock_details">Stock Details</string>
     <string name="stock_news_feed">News Feed</string>
