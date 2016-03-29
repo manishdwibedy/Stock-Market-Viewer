@@ -3,14 +3,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/favorite_item"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:baselineAligned="false">
 
 
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
+        android:layout_weight="3"
         android:layout_marginLeft="10dp">
 
         <TextView
@@ -27,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="13dp"
             android:text="Medium Text"
             android:id="@+id/stockName"
             android:singleLine="true" />
@@ -43,7 +45,8 @@
             android:layout_height="wrap_content"
             android:text="New Text"
             android:layout_columnWeight="1"
-            android:id="@+id/stockData"
+            android:textSize="20dp"
+            android:id="@+id/stockPrice"
             android:layout_row="0"
             android:layout_column="1" />
 
