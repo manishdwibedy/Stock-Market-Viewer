@@ -71,7 +71,8 @@
                 android:layout_height="wrap_content"
                 android:text="Clear"
                 android:id="@+id/button2"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:onClick="clearStock" />
         </LinearLayout>
 
     </LinearLayout>

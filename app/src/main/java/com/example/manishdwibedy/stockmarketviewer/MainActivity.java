@@ -90,19 +90,19 @@ public class MainActivity extends AppCompatActivity{
 
         setupFavorites();
 
-        final DelayAutoCompleteTextView bookTitle = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
-        bookTitle.setThreshold(2);
+        final DelayAutoCompleteTextView stockSelected = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
+        stockSelected.setThreshold(2);
 
-        bookTitle.setAdapter(new StockAutoCompleteAdapter(this)); // 'this' is Activity instance
-        bookTitle.setLoadingIndicator(
+        stockSelected.setAdapter(new StockAutoCompleteAdapter(this)); // 'this' is Activity instance
+        stockSelected.setLoadingIndicator(
                 (android.widget.ProgressBar) findViewById(R.id.pb_loading_indicator));
-        bookTitle.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        stockSelected.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Stock stock = (Stock) adapterView.getItemAtPosition(position);
-                bookTitle.setText(stock.getSymbol());
+                stockSelected.setText(stock.getSymbol());
                 selectedStock = stock;
-                bookTitle.setSelection(stock.getSymbol().length());
+                stockSelected.setSelection(stock.getSymbol().length());
             }
         });
     }
@@ -488,6 +488,13 @@ public class MainActivity extends AppCompatActivity{
 
         // Start the activity
         startActivity(intent);
+
+    }
+
+    public void clearStock(View view)
+    {
+        final DelayAutoCompleteTextView stockSelected = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
+        stockSelected.setText("");
 
     }
 }

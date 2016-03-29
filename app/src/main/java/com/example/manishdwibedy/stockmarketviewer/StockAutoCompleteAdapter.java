@@ -67,7 +67,7 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
                 FilterResults filterResults = new FilterResults();
 
                 // Cancelling the filter if the constraint has not changed.
-                if ( constraint.toString().equalsIgnoreCase(previousConstraint))
+                if (constraint!= null && constraint.toString().equalsIgnoreCase(previousConstraint))
                 {
                     constraint = null;
                 }
