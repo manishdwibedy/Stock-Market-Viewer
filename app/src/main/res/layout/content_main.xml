@@ -31,15 +31,20 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dp">
 
+            <!-- Dummy item to prevent AutoCompleteTextView from receiving focus -->
+            <LinearLayout
+                android:focusable="true" android:focusableInTouchMode="true"
+                android:layout_width="0px" android:layout_height="0px"/>
+
             <com.example.manishdwibedy.stockmarketviewer.DelayAutoCompleteTextView
                 android:id="@+id/et_book_title"
                 android:inputType="textPhonetic|textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
-                android:imeOptions="flagNoExtractUi|actionSearch" />
-                android:autoText="false"
-                android:inputType="text" />
+                android:imeOptions="flagNoExtractUi|actionSearch"
+                android:nextFocusUp="@id/et_book_title" android:nextFocusLeft="@id/et_book_title"
+                android:autoText="false" />
 
             <ProgressBar
                 android:id="@+id/pb_loading_indicator"
