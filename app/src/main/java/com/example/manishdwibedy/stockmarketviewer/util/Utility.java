@@ -199,10 +199,27 @@ public class Utility {
         return input;
     }
 
+    public static boolean isNegative(String input)
+    {
+        try{
+            Float number = Float.parseFloat(input);
+            if (number < 0)
+            {
+                return true;
+            }
+            return false;
+        }
+        catch (NumberFormatException nfe)
+        {
+            return false;
+        }
+
+    }
+
     public static void main(String[] args)
     {
-        String input = "Thu, 24 Mar 2016 11:51:58 -0700";
+        String input = "1.12";
 
-        System.out.print(parseNewsDateTime(input));
+        System.out.print(isNegative(input));
     }
 }
