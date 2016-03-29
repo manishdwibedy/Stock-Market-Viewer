@@ -106,10 +106,10 @@ public class Utility {
 
         if ((number >= million) && (number < billion)) {
             float fraction = calculateFraction(number, million);
-            return to2DecimalPlaces(Float.toString(fraction)) + " M";
+            return to2DecimalPlaces(Float.toString(fraction)) + " Million";
         } else if ((number >= billion) && (number < trillion)) {
             float fraction = calculateFraction(number, billion);
-            return to2DecimalPlaces(Float.toString(fraction)) + " B";
+            return to2DecimalPlaces(Float.toString(fraction)) + " Billion";
         }
         return Long.toString(number);
     }

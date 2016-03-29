@@ -59,7 +59,7 @@ public class FavoritesAdapter extends ArrayAdapter<FavoriteStock> {
             priceChange.setBackgroundColor(Color.GREEN);
         }
 
-        marketData.setText("Market : "+Utility.truncateNumber(marketCap));
+        marketData.setText("Market Cap : "+Utility.truncateNumber(marketCap));
 
         return  listViewItem;
     }
