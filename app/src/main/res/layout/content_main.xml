@@ -16,7 +16,8 @@
         android:orientation="vertical"
         android:id="@+id/searchForm"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:layout_width="wrap_content"
@@ -32,11 +33,11 @@
 
             <com.example.manishdwibedy.stockmarketviewer.DelayAutoCompleteTextView
                 android:id="@+id/et_book_title"
-                android:inputType="textCapSentences"
+                android:inputType="textPhonetic|textCapSentences"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingRight="5dp"
-                android:imeOptions="flagNoExtractUi|actionSearch"/>
+                android:imeOptions="flagNoExtractUi|actionSearch" />
                 android:autoText="false"
                 android:inputType="text" />
 
