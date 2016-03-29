@@ -4,11 +4,30 @@ import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created by manishdwibedy on 3/15/16.
  */
 public class GetStock {
-    public static Stock[] getStocks(String query){
+    public static List<Stock> getStocksList(String query){
+
+
+        //List<Stock> stocks = new ArrayList<Stock>();
+        Stock[] stocks = null;
+        String baseURL = "https://stock-app-csci.appspot.com/api.php?operation=lookup&name=";
+        try {
+            String response = HandleGETRequests.sendGet(baseURL + query);
+            Gson gson = new GsonBuilder().create();
+            stocks = gson.fromJson(response, Stock[].class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return Arrays.asList(stocks);
+    }
+
+    public static Stock[] getStocksArray(String query){
         //List<Stock> stocks = new ArrayList<Stock>();
         Stock[] stocks = null;
         String baseURL = "https://stock-app-csci.appspot.com/api.php?operation=lookup&name=";

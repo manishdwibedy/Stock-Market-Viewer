@@ -53,7 +53,7 @@ public class SearchSuggestionsProvider extends SearchRecentSuggestionsProvider {
         MatrixCursor cursor = new MatrixCursor(COLUMNS);
 
         // Getting the stocks from the API call
-        Stock[] dataList = GetStock.getStocks(query);
+        Stock[] dataList = GetStock.getStocksArray(query);
 
         // Addding our stock data to cursor
         try {

@@ -10,6 +10,7 @@ import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
+import com.example.manishdwibedy.stockmarketviewer.util.GetStock;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by manishdwibedy on 3/29/16.
  */
 public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable {
-
+    private static final String TAG = "StockAutoCompleteAdapter";
     private static final int MAX_RESULTS = 10;
     private Context mContext;
     private List<Stock> resultList = new ArrayList<Stock>();
@@ -85,16 +86,29 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
     /**
      * Returns a search result for the given Stock title.
      */
-    private List<Stock> findStocks(Context context, String StockTitle) {
+    private List<Stock> findStocks(Context context, final String stockTitle) {
         // GoogleStocksProtocol is a wrapper for the Google Stocks API
         //Stock protocol = new Stock(context, MAX_RESULTS);
 
+        final List<Stock> list = new ArrayList<Stock>();
+        list.addAll(GetStock.getStocksList(stockTitle));
+        // Doing the async task on a new thread.
+//        Runnable runnable = new Runnable() {
+//            @Override
+//            public void run() {
+//
+//            }
+//        };
+//        new Thread(runnable).start();
+
+
+
         // Adding a dummy node for testing
-        List<Stock> stocks = new ArrayList<Stock>();
-        Stock stock = new Stock();
-        stock.setName("AAPL");
-        stocks.add(stock);
-        this.resultList = stocks;
-        return stocks;
+//        List<Stock> stocks = new ArrayList<Stock>();
+//        Stock stock = new Stock();
+//        stock.setName("AAPL");
+//        stocks.add(stock);
+        this.resultList = list;
+        return list;
     }
 }
