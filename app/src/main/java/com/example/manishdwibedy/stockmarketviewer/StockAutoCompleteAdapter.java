@@ -23,6 +23,7 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
     private static final int MAX_RESULTS = 10;
     private Context mContext;
     private List<Stock> resultList = new ArrayList<Stock>();
+    private String previousConstraint = null;
 
     public StockAutoCompleteAdapter(Context context) {
         mContext = context;
@@ -64,6 +65,13 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults filterResults = new FilterResults();
+
+                // Cancelling the filter if the constraint has not changed.
+                if ( constraint.toString().equalsIgnoreCase(previousConstraint))
+                {
+                    constraint = null;
+                }
+
                 if (constraint != null) {
                     List<Stock> Stocks = findStocks(mContext, constraint.toString());
 
@@ -78,6 +86,7 @@ public class StockAutoCompleteAdapter extends BaseAdapter implements Filterable 
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 if (results != null && results.count > 0) {
                     resultList = (List<Stock>) results.values;
+                    previousConstraint = constraint.toString();
                     notifyDataSetChanged();
                 } else {
                     notifyDataSetInvalidated();
