@@ -443,9 +443,9 @@ public class MainActivity extends AppCompatActivity{
                 @Override
                 public void run() {
                     try{
-                        Toast.makeText(MainActivity.this, "Refreshing!",
-                                Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Refreshing the stocks");
+//                        Toast.makeText(MainActivity.this, "Refreshing!",
+//                                Toast.LENGTH_SHORT).show();
+//                        Log.d(TAG, "Refreshing the stocks");
 
                         SharedPreferences preferences = MainActivity.this.
                                 getSharedPreferences(Constant.preferences, Context.MODE_PRIVATE);
