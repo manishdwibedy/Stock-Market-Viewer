@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity{
         setupFavorites();
 
         final DelayAutoCompleteTextView bookTitle = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
-        bookTitle.setThreshold(3);
+        bookTitle.setThreshold(2);
 
         bookTitle.setAdapter(new StockAutoCompleteAdapter(this)); // 'this' is Activity instance
         bookTitle.setLoadingIndicator(
@@ -102,6 +102,7 @@ public class MainActivity extends AppCompatActivity{
                 Stock stock = (Stock) adapterView.getItemAtPosition(position);
                 bookTitle.setText(stock.getSymbol());
                 selectedStock = stock;
+                bookTitle.setSelection(stock.getSymbol().length());
             }
         });
     }
