@@ -34,8 +34,9 @@ public class FavoritesAdapter extends ArrayAdapter<FavoriteStock> {
         View listViewItem = inflater.inflate(R.layout.favorites_layout, null, true);
         TextView stockSymbol = (TextView) listViewItem.findViewById(R.id.stockSymbol);
         TextView stockName = (TextView) listViewItem.findViewById(R.id.stockName);
-        TextView stockData = (TextView) listViewItem.findViewById(R.id.stockData);
+        TextView stockData = (TextView) listViewItem.findViewById(R.id.stockPrice);
         TextView marketData = (TextView) listViewItem.findViewById(R.id.marketData);
+        TextView priceChange = (TextView) listViewItem.findViewById(R.id.stockPriceChange);
 
         FavoriteStock stock = data.get(position);
         stockName.setText(stock.getName());
@@ -46,8 +47,10 @@ public class FavoritesAdapter extends ArrayAdapter<FavoriteStock> {
         String marketCap = Utility.to2DecimalPlaces(stock.getMarketCap());
         String percentChange = Utility.to2DecimalPlaces(stock.getChangePercent());
 
-        stockData.setText(stockPrice + " (" + percentChange + "% )");
+        stockData.setText(stockPrice);
+        priceChange.setText(percentChange + "%");
         marketData.setText("Market : "+Utility.truncateNumber(marketCap));
+
         return  listViewItem;
     }
 
