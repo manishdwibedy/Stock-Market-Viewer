@@ -489,6 +489,11 @@ public class MainActivity extends AppCompatActivity{
         final Intent intent = new Intent(getBaseContext(), SearchActivity.class);
         intent.putExtra(Constant.favoriteSelectedKey, Constant.favoriteSelectedValue);
 
+        // Hiding the keyboard
+        InputMethodManager in = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        View currentView = this.getCurrentFocus();
+        in.hideSoftInputFromWindow(currentView.getApplicationWindowToken(), 0);
+
         if(selectedStock == null)
         {
             final DelayAutoCompleteTextView stockSelected = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
@@ -523,14 +528,6 @@ public class MainActivity extends AppCompatActivity{
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
 
-                                        }
-
-                                    });
-
-                                    alertDialog.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            // Cancelled deletion!
                                         }
 
                                     });
