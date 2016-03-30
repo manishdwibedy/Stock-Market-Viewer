@@ -1,10 +1,13 @@
 package com.example.manishdwibedy.stockmarketviewer.adapter;
 
 import android.app.Activity;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.manishdwibedy.stockmarketviewer.R;
@@ -38,6 +41,27 @@ public class StockDetailsAdapter extends ArrayAdapter<StockDetail> {
         nameTextView.setText(detail.getName());
         valueTextView.setText(detail.getValue());
 
+        if(detail.getName().equals("CHANGE") || detail.getName().equals("CHANGEYTD"))
+        {
+            LinearLayout stockValueLayout = (LinearLayout)listViewItem.findViewById(R.id.stockValueLayout);
+
+            ImageView changeImage = new ImageView(context);
+
+            if(detail.getValue().contains("-"))
+            {
+                changeImage.setImageResource(R.drawable.down);
+            }
+            else
+            {
+                changeImage.setImageResource(R.drawable.up);
+            }
+
+            changeImage.setForegroundGravity(Gravity.LEFT);
+            changeImage.setMaxWidth(20);
+            changeImage.setMaxHeight(20);
+            stockValueLayout.addView(changeImage);
+            //stockValueLayout.setMinimumHeight(20);
+        }
         return  listViewItem;
     }
 

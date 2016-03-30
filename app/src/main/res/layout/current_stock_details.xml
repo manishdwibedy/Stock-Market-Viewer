@@ -15,16 +15,24 @@
         android:textSize="20dp"
         android:textColor="#000000"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Medium Text"
-        android:id="@+id/details_value"
-        android:layout_weight="1"
-        android:gravity="right"
-        android:textStyle="bold"
-        android:layout_marginBottom="5dp"
-        android:textSize="30dp"
-        android:textColor="#000000"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/stockValueLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Medium Text"
+            android:id="@+id/details_value"
+            android:gravity="left"
+            android:textStyle="bold"
+            android:layout_marginBottom="5dp"
+            android:textSize="30dp"
+            android:textColor="#000000"/>
+
+    </LinearLayout>
+
 </LinearLayout>
