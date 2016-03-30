@@ -31,6 +31,7 @@ import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.model.StockData;
+import com.example.manishdwibedy.stockmarketviewer.swipe.SwipeDismissListViewTouchListener;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.example.manishdwibedy.stockmarketviewer.util.GetStockData;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
@@ -229,8 +230,29 @@ public class MainActivity extends AppCompatActivity{
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
-                                    listView.setAdapter(favoritesAdapter);
+                                favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
+                                listView.setAdapter(favoritesAdapter);
+
+                                SwipeDismissListViewTouchListener touchListener =
+                                    new SwipeDismissListViewTouchListener(
+                                        listView,
+                                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                                            @Override
+                                            public boolean canDismiss(int position) {
+                                                return true;
+                                            }
+
+                                            @Override
+                                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                                for (int position : reverseSortedPositions) {
+                                                    favoritesAdapter.remove(favoritesAdapter.getItem(position));
+                                                }
+                                                favoritesAdapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                listView.setOnTouchListener(touchListener);
+
+                                listView.setOnScrollListener(touchListener.makeScrollListener());
                                 }
                             });
                         }
