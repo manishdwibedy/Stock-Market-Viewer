@@ -276,7 +276,12 @@ public class PageFragment extends Fragment {
 
 //                                    stockDetail.setValue(stockDetail.getValue() + "(" + m.invoke(stockData) + ")");
                                     String value = Utility.to2DecimalPlaces(stockData.getChangePercent());
-                                    stockDetail.setValue(stockDetail.getValue() + "(" + value + ")");
+
+                                    if(!Utility.isNegative(value))
+                                    {
+                                        value = "+" + value;
+                                    }
+                                    stockDetail.setValue(stockDetail.getValue() + "(" + value + "%)");
                                 }
                                 // Set the Change Percent YTD
                                 else if (property.equalsIgnoreCase("ChangeYTD")) {
@@ -286,7 +291,12 @@ public class PageFragment extends Fragment {
 //
 //                                    stockDetail.setValue(stockDetail.getValue() + "(" + m.invoke(stockData) + ")");
                                     String value = Utility.to2DecimalPlaces(stockData.getChangePercentYTD());
-                                    stockDetail.setValue(stockDetail.getValue() + "(" + value + ")");
+
+                                    if(!Utility.isNegative(value))
+                                    {
+                                        value = "+" + value;
+                                    }
+                                    stockDetail.setValue(stockDetail.getValue() + "(" + value + "%)");
                                 } else if (property.equalsIgnoreCase("Timestamp")) {
                                     String timestamp = Utility.parseDateTime(propertyValue);
                                     if (timestamp != null) {
