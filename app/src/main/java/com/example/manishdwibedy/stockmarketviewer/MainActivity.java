@@ -312,9 +312,7 @@ public class MainActivity extends AppCompatActivity{
                         public void onDismiss(@NonNull final ViewGroup listViewGroup, @NonNull final int[] reverseSortedPositions) {
                             for (int position : reverseSortedPositions) {
                                 FavoriteStock selectedStock = (FavoriteStock) listView.getItemAtPosition(position);
-                                favoritesAdapter.getData().remove(selectedStock);
-                                Utility.removeFromFavorites(MainActivity.this, selectedStock);
-                                favoritesAdapter.notifyDataSetChanged();
+                                showDialog(selectedStock);
                             }
                         }
                     }
