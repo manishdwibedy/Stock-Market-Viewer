@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -17,10 +18,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.CompoundButton;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -31,11 +32,12 @@ import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.model.Stock;
 import com.example.manishdwibedy.stockmarketviewer.model.StockData;
-import com.example.manishdwibedy.stockmarketviewer.swipe.SwipeDismissListViewTouchListener;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.example.manishdwibedy.stockmarketviewer.util.GetStockData;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
 import com.google.gson.Gson;
+import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +51,7 @@ public class MainActivity extends AppCompatActivity{
     private final String TAG = "MainActivity";
     SearchView searchView;
     private Gson gson;
-    private ListView listView;
+    private DynamicListView listView;
 
     // Represented whether a stock was long presses for options
     private boolean isStockLongPressed = false;
@@ -201,7 +203,7 @@ public class MainActivity extends AppCompatActivity{
         // Retrieving the favorites object
         final Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
 
-        listView = (ListView) findViewById(R.id.favoritesListView);
+        listView = (DynamicListView) findViewById(R.id.favoritesListView);
 
         final Activity context = this;
 
@@ -232,27 +234,6 @@ public class MainActivity extends AppCompatActivity{
                                 public void run() {
                                 favoritesAdapter = new FavoritesAdapter(context, favoriteStocks);
                                 listView.setAdapter(favoritesAdapter);
-
-                                SwipeDismissListViewTouchListener touchListener =
-                                    new SwipeDismissListViewTouchListener(
-                                        listView,
-                                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
-                                            @Override
-                                            public boolean canDismiss(int position) {
-                                                return true;
-                                            }
-
-                                            @Override
-                                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
-                                                for (int position : reverseSortedPositions) {
-                                                    favoritesAdapter.remove(favoritesAdapter.getItem(position));
-                                                }
-                                                favoritesAdapter.notifyDataSetChanged();
-                                            }
-                                        });
-                                listView.setOnTouchListener(touchListener);
-
-                                listView.setOnScrollListener(touchListener.makeScrollListener());
                                 }
                             });
                         }
@@ -285,6 +266,7 @@ public class MainActivity extends AppCompatActivity{
                 .equals(Constant.favoritesEmpty)) {
 
             setFavoriteListView(preferences);
+
 
             // Moving to the SearchActivity when a stock is selected from the favorite list
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -324,6 +306,19 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
 
+            listView.enableSwipeToDismiss(
+                    new OnDismissCallback() {
+                        @Override
+                        public void onDismiss(@NonNull final ViewGroup listViewGroup, @NonNull final int[] reverseSortedPositions) {
+                            for (int position : reverseSortedPositions) {
+                                FavoriteStock selectedStock = (FavoriteStock) listView.getItemAtPosition(position);
+                                favoritesAdapter.getData().remove(selectedStock);
+                                Utility.removeFromFavorites(MainActivity.this, selectedStock);
+                                favoritesAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    }
+            );
         }
     }
 
@@ -383,7 +378,7 @@ public class MainActivity extends AppCompatActivity{
         // Retrieving the favorites object
         final Favorites favorites = gson.fromJson(favoritesJSON, Favorites.class);
 
-        listView = (ListView) findViewById(R.id.favoritesListView);
+        listView = (DynamicListView) findViewById(R.id.favoritesListView);
 
         final Activity context = this;
 
