@@ -9,4 +9,10 @@
         android:title="Add to Favorites"
         android:icon="@drawable/star"
         appcompat:showAsAction="always"/>
+
+    <item
+        android:id="@+id/fbShare"
+        android:title="FB Share"
+        android:icon="@drawable/fb"
+        appcompat:showAsAction="always"/>
 </menu>

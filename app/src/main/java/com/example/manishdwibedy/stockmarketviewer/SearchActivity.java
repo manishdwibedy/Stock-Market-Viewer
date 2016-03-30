@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -20,10 +21,16 @@ import com.example.manishdwibedy.stockmarketviewer.model.FavoriteStock;
 import com.example.manishdwibedy.stockmarketviewer.model.Favorites;
 import com.example.manishdwibedy.stockmarketviewer.util.Constant;
 import com.example.manishdwibedy.stockmarketviewer.util.Utility;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.share.Sharer;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 import com.google.gson.Gson;
 
 import java.util.ArrayList;
-
 
 public class SearchActivity extends AppCompatActivity {
     // The TAG to be used for logging purposes
@@ -41,10 +48,14 @@ public class SearchActivity extends AppCompatActivity {
     // Stock Favorite
     private boolean isFavorite = false;
 
+    CallbackManager callbackManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
 
         // Adding a back button to the parent activity
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -232,9 +243,55 @@ public class SearchActivity extends AppCompatActivity {
                 }
 
                 return true;
+            case R.id.fbShare:
+                Toast.makeText(this.getApplicationContext(), "Sharing " + stock.getName() + "!!",
+                        Toast.LENGTH_SHORT).show();
+                shareFB();
+                return true;
+
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void shareFB() {
+        callbackManager = CallbackManager.Factory.create();
+
+        final ShareDialog shareDialog = new ShareDialog(this);
+
+
+        if (ShareDialog.canShow(ShareLinkContent.class)) {
+            ShareLinkContent linkContent = new ShareLinkContent.Builder()
+                    .setContentTitle("Current Weather in " + "CITY" + ", " + "State")
+                    .setContentDescription(
+                            "Summary" + ", " + "temperature")
+                    .setContentUrl(Uri.parse("http://forecast.io"))
+                    .build();
+
+            shareDialog.show(linkContent, ShareDialog.Mode.FEED);
+        }
+        shareDialog.registerCallback(callbackManager, new FacebookCallback<Sharer.Result>() {
+            @Override
+            public void onSuccess(Sharer.Result result) {
+                Toast.makeText(getApplicationContext(), "Posted share successfully", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCancel() {
+                Toast.makeText(getApplicationContext(), "Post Cancelled", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
     // Setting up favorites for the first time only
