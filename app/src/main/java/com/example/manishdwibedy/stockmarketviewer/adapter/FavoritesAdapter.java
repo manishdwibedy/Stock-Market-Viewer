@@ -48,6 +48,7 @@ public class FavoritesAdapter extends ArrayAdapter<FavoriteStock> {
         String marketCap = Utility.to2DecimalPlaces(stock.getMarketCap());
         String percentChange = Utility.to2DecimalPlaces(stock.getChangePercent());
 
+
         stockData.setText(stockPrice);
         priceChange.setText(percentChange + "%");
         if(Utility.isNegative(percentChange))
@@ -57,8 +58,9 @@ public class FavoritesAdapter extends ArrayAdapter<FavoriteStock> {
         else
         {
             priceChange.setBackgroundColor(Color.GREEN);
+            percentChange = "+" + percentChange;
         }
-
+        priceChange.setText(percentChange + "%");
         marketData.setText("Market Cap : "+Utility.truncateNumber(marketCap));
 
         return  listViewItem;
