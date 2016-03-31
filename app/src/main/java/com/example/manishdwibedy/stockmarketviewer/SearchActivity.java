@@ -262,10 +262,14 @@ public class SearchActivity extends AppCompatActivity {
 
         if (ShareDialog.canShow(ShareLinkContent.class)) {
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
-                    .setContentTitle("Current Weather in " + "CITY" + ", " + "State")
+                    .setContentTitle("Current Stock Price of " +
+                                            this.stock.getName() + ", "
+                                            + this.stock.getLastPrice())
                     .setContentDescription(
-                            "Summary" + ", " + "temperature")
-                    .setContentUrl(Uri.parse("http://forecast.io"))
+                            "Stock Information of "+ this.stock.getName())
+                    .setContentUrl(Uri.parse("Last Trade Price : " + this.stock.getLastPrice()
+                                                + ", Change : " + this.stock.getChange()
+                                                + " (" + this.stock.getChangePercent() + ")"))
                     .build();
 
             shareDialog.show(linkContent, ShareDialog.Mode.FEED);
