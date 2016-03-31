@@ -9,6 +9,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import uk.co.senab.photoview.PhotoViewAttacher;
+
 /**
  * Created by manishdwibedy on 3/21/16.
  */
@@ -43,6 +45,8 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
     protected void onPostExecute(Bitmap result) {
         super.onPostExecute(result);
         imageView.setImageBitmap(result);
+        PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
+
     }
 
 }
