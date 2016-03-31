@@ -4,8 +4,12 @@ package com.example.manishdwibedy.stockmarketviewer.fragments;
  * Created by manishdwibedy on 3/16/16.
  */
 
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -13,10 +17,13 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.manishdwibedy.stockmarketviewer.ChartWebViewClient;
@@ -41,6 +48,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+
+import uk.co.senab.photoview.PhotoViewAttacher;
 
 import static com.example.manishdwibedy.stockmarketviewer.R.id.progressBar;
 
@@ -363,16 +372,67 @@ public class PageFragment extends Fragment {
                     Point size = new Point();
                     display.getSize(size);
                     int width = size.x;
+                    int height = size.y;
 
-                    ImageView imageView = (ImageView) view.findViewById(R.id.stockImage);
+                    final ImageView imageView = (ImageView) view.findViewById(R.id.stockImage);
                     String URL = "http://chart.finance.yahoo.com/t?s=" +
                             stock.getSymbol() +
-                            "&amp;lang=en-US&amp;amp;width=" +
+                            "&amp;lang=en-US&;amp;width=" +
                             Utility.convertDpToPixel((float)width, getActivity()) +
                             "&amp;height=" +
                             Utility.convertDpToPixel(150f, getActivity());
-                    Bitmap bitmap = new ImageLoadTask(URL, imageView).execute().get();
+                    Bitmap bitmap = new ImageLoadTask(URL, imageView, true).execute().get();
                     Log.d(TAG, bitmap.toString());
+
+                    imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            Dialog builder = new Dialog(getActivity());
+                            builder.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                            builder.getWindow().setBackgroundDrawable(
+                                    new ColorDrawable(android.graphics.Color.TRANSPARENT));
+                            builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                                @Override
+                                public void onDismiss(DialogInterface dialogInterface) {
+                                    //nothing;
+                                }
+                            });
+
+
+                            WindowManager wm = (WindowManager) getActivity().getSystemService(Context.WINDOW_SERVICE);
+                            Display display = wm.getDefaultDisplay();
+                            Point point = new Point();
+                            display.getSize(point);
+
+                            String URL = "http://chart.finance.yahoo.com/t?s=" +
+                                    stock.getSymbol() +
+                                    "&amp;lang=en-US&amp;width=" +
+                                    Utility.convertDpToPixel((float)point.x, getActivity()) +
+                                    "&amp;height=" +
+                                    Utility.convertDpToPixel(1000f, getActivity());
+                            try{
+                                Bitmap bitmap = new ImageLoadTask(URL, imageView, false).execute().get();
+                                ImageView imageView = new ImageView(getActivity());
+                                imageView.setImageBitmap(bitmap);
+                                PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
+                                builder.addContentView(imageView, new RelativeLayout.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.MATCH_PARENT));
+                                builder.show();
+                            }
+                            catch (InterruptedException e)
+                            {
+
+                            }
+                            catch (ExecutionException e)
+                            {
+
+                            }
+
+
+                        }
+                    });
 
                 } catch (Exception e) {
 

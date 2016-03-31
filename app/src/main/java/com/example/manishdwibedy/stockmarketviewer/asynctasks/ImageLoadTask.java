@@ -9,8 +9,6 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import uk.co.senab.photoview.PhotoViewAttacher;
-
 /**
  * Created by manishdwibedy on 3/21/16.
  */
@@ -18,10 +16,12 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
 
     private String url;
     private ImageView imageView;
+    private boolean isLoad;
 
-    public ImageLoadTask(String url, ImageView imageView) {
+    public ImageLoadTask(String url, ImageView imageView, boolean isLoad) {
         this.url = url;
         this.imageView = imageView;
+        this.isLoad = isLoad;
     }
 
     @Override
@@ -44,8 +44,12 @@ public class ImageLoadTask extends AsyncTask<Void, Void, Bitmap> {
     @Override
     protected void onPostExecute(Bitmap result) {
         super.onPostExecute(result);
-        imageView.setImageBitmap(result);
-        PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
+        if(isLoad)
+        {
+            imageView.setImageBitmap(result);
+        }
+
+        //PhotoViewAttacher mAttacher = new PhotoViewAttacher(imageView);
 
     }
 
