@@ -261,15 +261,17 @@ public class SearchActivity extends AppCompatActivity {
 
 
         if (ShareDialog.canShow(ShareLinkContent.class)) {
+            String URL = "http://chart.finance.yahoo.com/t?s=" +
+                    stock.getSymbol();
+
             ShareLinkContent linkContent = new ShareLinkContent.Builder()
                     .setContentTitle("Current Stock Price of " +
                                             this.stock.getName() + ", "
                                             + this.stock.getLastPrice())
                     .setContentDescription(
-                            "Stock Information of "+ this.stock.getName())
-                    .setContentUrl(Uri.parse("Last Trade Price : " + this.stock.getLastPrice()
-                                                + ", Change : " + this.stock.getChange()
-                                                + " (" + this.stock.getChangePercent() + ")"))
+                            "Stock Information of " + this.stock.getName())
+                    .setContentUrl(Uri.parse("http://www.google.com"))
+                    .setImageUrl(Uri.parse(URL))
                     .build();
 
             shareDialog.show(linkContent, ShareDialog.Mode.FEED);
