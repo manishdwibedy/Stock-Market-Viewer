@@ -271,7 +271,7 @@ public class SearchActivity extends AppCompatActivity {
                                             + this.stock.getLastPrice())
                     .setContentDescription(
                             "Stock Information of " + this.stock.getName())
-                    .setContentUrl(Uri.parse("http://www.google.com"))
+                    .setContentUrl(Uri.parse("http://www.finance.yahoo.com"))
                     .setImageUrl(Uri.parse(URL))
                     .build();
 
