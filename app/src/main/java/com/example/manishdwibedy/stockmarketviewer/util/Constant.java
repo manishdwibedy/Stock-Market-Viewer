@@ -5,6 +5,8 @@ package com.example.manishdwibedy.stockmarketviewer.util;
  */
 public interface Constant {
 
+    // Empty String
+    String emptyString = "";
     // For storing favorites
     String preferences = "Preferences";
 

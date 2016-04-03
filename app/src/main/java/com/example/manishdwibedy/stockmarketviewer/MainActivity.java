@@ -514,7 +514,7 @@ public class MainActivity extends AppCompatActivity{
             final DelayAutoCompleteTextView stockSelected = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
             final String symbol = stockSelected.getText().toString();
 
-            if(symbol.equals(""))
+            if(symbol.equals(Constant.emptyString))
             {
                 AlertDialog.Builder alertDialog=new AlertDialog.Builder(MainActivity.this);
 
