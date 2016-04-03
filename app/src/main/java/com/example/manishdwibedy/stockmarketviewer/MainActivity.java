@@ -513,59 +513,80 @@ public class MainActivity extends AppCompatActivity{
         {
             final DelayAutoCompleteTextView stockSelected = (DelayAutoCompleteTextView) findViewById(R.id.et_book_title);
             final String symbol = stockSelected.getText().toString();
-            Stock stock = new Stock();
-            stock.setSymbol(symbol);
-            intent.putExtra(Constant.stockData, new Gson().toJson(stock));
 
-            // Doing the async task on a new thread.
-            Runnable runnable = new Runnable() {
-                @Override
-                public void run() {
-                    StockData stockData = GetStockData.getStockData(symbol);
-                    if(stockData == null)
-                    {
-                        Log.d(TAG, "Error");
+            if(symbol.equals(""))
+            {
+                AlertDialog.Builder alertDialog=new AlertDialog.Builder(MainActivity.this);
 
-                        // Setting the list view's adapter
-                        Thread thread = new Thread(){
-                            @Override
-                            public void run() {
-                            synchronized (this) {
+                alertDialog.setMessage("Please enter a valid Stock name or symbol!");
+                alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                    AlertDialog.Builder alertDialog=new AlertDialog.Builder(MainActivity.this);
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                                    alertDialog.setMessage("Invalid Symbol");
-                                    alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    }
 
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
+                });
 
-                                        }
+                alertDialog.show();
+            }
+            else
+            {
+                Stock stock = new Stock();
+                stock.setSymbol(symbol);
+                intent.putExtra(Constant.stockData, new Gson().toJson(stock));
 
-                                    });
+                // Doing the async task on a new thread.
+                Runnable runnable = new Runnable() {
+                    @Override
+                    public void run() {
+                        StockData stockData = GetStockData.getStockData(symbol);
+                        if(stockData == null)
+                        {
+                            Log.d(TAG, "Error");
 
-                                    alertDialog.show();
+                            // Setting the list view's adapter
+                            Thread thread = new Thread(){
+                                @Override
+                                public void run() {
+                                    synchronized (this) {
+
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                            AlertDialog.Builder alertDialog=new AlertDialog.Builder(MainActivity.this);
+
+                                            alertDialog.setMessage("Invalid Symbol");
+                                            alertDialog.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+
+                                            });
+
+                                            alertDialog.show();
+                                            }
+                                        });
                                     }
-                                });
-                            }
+                                };
                             };
-                        };
-                        thread.start();
+                            thread.start();
+
+                        }
+                        else
+                        {
+                            intent.putExtra(Constant.stockData, new Gson().toJson(stockData));
+                            startActivity(intent);
+                        }
+
 
                     }
-                    else
-                    {
-                        intent.putExtra(Constant.stockData, new Gson().toJson(stockData));
-                        startActivity(intent);
-                    }
+                };
+                new Thread(runnable).start();
+            }
 
-
-                }
-            };
-            new Thread(runnable).start();
         }
         else
         {
